@@ -1,10 +1,13 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using Unity.Mathematics;
 
 public class Player : MonoBehaviour
 {
-    public float playerSpeed = 15f;
+    public float playerSpeed = 15f; //use
+
+    public bool isHoldRock = false;
 
     public Rock rock;
     public QTEManager qteManager;
@@ -19,9 +22,26 @@ public class Player : MonoBehaviour
     public Vector2 autoWalkDir = new Vector2(-1f, 0.5f).normalized;
 
     public float catchDistance = 2f;
-    public float pushForce = 10f;
+    //public float pushForce = 10f;
     public float pushCooldown = 1.0f;
     private float lastPushTime;
+
+    //-----------------------------------------------------   Gun new value for push system
+
+    public float pushForce = 0f;
+
+    public float maxForce = 100f;
+    public float minReboundForce = 5f;
+
+    public float timeToMax = 5f;        
+    public float timeToRebound = 2.5f;
+    private float timer = 0f;
+
+    private bool isCharging = false;
+    private bool statusGoingDown = false;
+
+    //-----------------------------------------------------
+
 
     private Coroutine cdRoutine;
     private Coroutine missedRoutine;
@@ -37,28 +57,32 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        /*if (Input.GetKeyDown(KeyCode.Space))  // push
         {
-            if (qteManager.isQTEActive)
+            if (qteManager.isQTEActive) // check cooldown
             {
                 bool isHit = qteManager.CheckHit();
                 qteManager.StopQTE();
 
                 if (isHit)
                 {
-                    rock.PushRockUp(autoWalkDir, pushForce);
+                    rock.PushRockUp(autoWalkDir, pushForce); // push
                 }
-                else
+                else // show text
                 {
-                    if (missedRoutine != null) StopCoroutine(missedRoutine);
+                    if (missedRoutine != null) 
+                    { 
+                        StopCoroutine(missedRoutine); 
+                    }
+
                     missedRoutine = StartCoroutine(ShowMessage(missedText));
                 }
 
-                lastPushTime = Time.time;
+                lastPushTime = Time.time; // collect start cooldown
                 return;
             }
 
-            if (Time.time >= lastPushTime + pushCooldown)
+            if (Time.time >= lastPushTime + pushCooldown) // cooldown reach
             {
                 float distance = Physics2D.Distance(playerCol, rockCol).distance;
 
@@ -67,20 +91,73 @@ public class Player : MonoBehaviour
                     rock.StartSlowdown(2f);
                     qteManager.StartQTE();
                 }
-                else
+                else // show text
                 {
-                    if (outOfRangeRoutine != null) StopCoroutine(outOfRangeRoutine);
+                    if (outOfRangeRoutine != null)  
+                    { 
+                        StopCoroutine(outOfRangeRoutine); 
+                    }
                     outOfRangeRoutine = StartCoroutine(ShowMessage(outOfRangeText));
                 }
 
             }
-            else
+            else // still cooldown
             {
-                if (cdRoutine != null) StopCoroutine(cdRoutine);
+                if (cdRoutine != null) 
+                { 
+                    StopCoroutine(cdRoutine); 
+                }
+
                 cdRoutine = StartCoroutine(ShowMessage(cooldownText));
             }
 
         }
+        */
+        if (Input.GetKeyDown(KeyCode.Space)) 
+        {
+            isCharging = true;
+            pushForce = 0f;
+            timer = 0f;
+            statusGoingDown = false;
+        }
+
+        if (Input.GetKey(KeyCode.Space) && isCharging)
+        {
+            timer += Time.deltaTime;
+
+            if (!statusGoingDown)
+            {
+                float t = Mathf.Clamp01(timer / timeToMax);
+                pushForce = Mathf.Lerp(0f, maxForce, t);
+
+                if (timer >= timeToMax)
+                {
+                    statusGoingDown = true;
+                    timer = 0f;
+                }
+            }
+            else
+            {
+                float t = Mathf.Clamp01(timer / timeToRebound);
+                pushForce = Mathf.Lerp(maxForce, minReboundForce, t);
+            }
+
+            Debug.Log($" Force: {pushForce}");
+        }
+
+        if (Input.GetKeyUp(KeyCode.Space) && isCharging)
+        {
+            rock.PushRockUp(autoWalkDir, pushForce);
+            ResetCharge();
+        }
+    }
+
+    void ResetCharge()
+    {
+        isCharging = false;
+        statusGoingDown = false;
+        timer = 0f;
+        pushForce = 0f;
     }
 
     private void FixedUpdate()
@@ -93,7 +170,7 @@ public class Player : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, catchDistance);
     }
-
+        
     private IEnumerator ShowMessage(TMP_Text textUI)
     {
         textUI.gameObject.SetActive(true);

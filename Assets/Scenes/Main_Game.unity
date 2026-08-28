@@ -948,6 +948,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   playerSpeed: 10
+  isHoldRock: 0
   rock: {fileID: 765773639}
   qteManager: {fileID: 1067621591}
   cooldownText: {fileID: 462946040}
@@ -955,8 +956,12 @@ MonoBehaviour:
   missedText: {fileID: 1237738334}
   autoWalkDir: {x: -1, y: 0.5}
   catchDistance: 1
-  pushForce: 60
   pushCooldown: 1
+  pushForce: 60
+  maxForce: 60
+  minReboundForce: 5
+  timeToMax: 2
+  timeToRebound: 1
 --- !u!70 &818787333
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
