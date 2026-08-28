@@ -7,8 +7,6 @@ public class Player : MonoBehaviour
 {
     public float playerSpeed = 15f; //use
 
-    public bool isHoldRock = false;
-
     public Rock rock;
     public QTEManager qteManager;
     Collider2D playerCol;
@@ -39,6 +37,8 @@ public class Player : MonoBehaviour
 
     private bool isCharging = false;
     private bool statusGoingDown = false;
+
+    public bool isHoldRock = false;
 
     //-----------------------------------------------------
 
@@ -113,43 +113,45 @@ public class Player : MonoBehaviour
 
         }
         */
-        if (Input.GetKeyDown(KeyCode.Space)) 
-        {
-            isCharging = true;
-            pushForce = 0f;
-            timer = 0f;
-            statusGoingDown = false;
-        }
 
-        if (Input.GetKey(KeyCode.Space) && isCharging)
-        {
-            timer += Time.deltaTime;
 
-            if (!statusGoingDown)
+            if (Input.GetKeyDown(KeyCode.Space)) 
             {
-                float t = Mathf.Clamp01(timer / timeToMax);
-                pushForce = Mathf.Lerp(0f, maxForce, t);
+                isCharging = true;
+                pushForce = 0f;
+                timer = 0f;
+                statusGoingDown = false;
+            }
 
-                if (timer >= timeToMax)
+            if (Input.GetKey(KeyCode.Space) && isCharging)
+            {
+                timer += Time.deltaTime;
+
+                if (!statusGoingDown)
                 {
-                    statusGoingDown = true;
-                    timer = 0f;
+                    float t = Mathf.Clamp01(timer / timeToMax);
+                    pushForce = Mathf.Lerp(0f, maxForce, t);
+
+                    if (timer >= timeToMax)
+                    {
+                        statusGoingDown = true;
+                        timer = 0f;
+                    }
                 }
+                else
+                {
+                    float t = Mathf.Clamp01(timer / timeToRebound);
+                    pushForce = Mathf.Lerp(maxForce, minReboundForce, t);
+                }
+
+                Debug.Log($" Force: {pushForce}");
             }
-            else
+
+            if (Input.GetKeyUp(KeyCode.Space) && isCharging)
             {
-                float t = Mathf.Clamp01(timer / timeToRebound);
-                pushForce = Mathf.Lerp(maxForce, minReboundForce, t);
+                rock.PushRockUp(autoWalkDir, pushForce);
+                ResetCharge();
             }
-
-            Debug.Log($" Force: {pushForce}");
-        }
-
-        if (Input.GetKeyUp(KeyCode.Space) && isCharging)
-        {
-            rock.PushRockUp(autoWalkDir, pushForce);
-            ResetCharge();
-        }
     }
 
     void ResetCharge()
