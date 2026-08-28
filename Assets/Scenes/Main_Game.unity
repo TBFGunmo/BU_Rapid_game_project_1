@@ -606,7 +606,7 @@ GameObject:
   - component: {fileID: 765773639}
   m_Layer: 0
   m_Name: Rock
-  m_TagString: Untagged
+  m_TagString: rock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -929,8 +929,8 @@ Transform:
   m_GameObject: {fileID: 818787329}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.71, y: -3.26, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 9.0192, y: -3.6276, z: 0}
+  m_LocalScale: {x: 0.9783, y: 0.77235717, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -948,20 +948,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   playerSpeed: 10
+  RunSpeed: 10
+  currentSpeed: 0
   rock: {fileID: 765773639}
   qteManager: {fileID: 1067621591}
   cooldownText: {fileID: 462946040}
   outOfRangeText: {fileID: 314966012}
   missedText: {fileID: 1237738334}
   autoWalkDir: {x: -1, y: 0.5}
-  catchDistance: 1
+  catchDistance: 2
   pushCooldown: 1
-  pushForce: 60
-  maxForce: 60
-  minReboundForce: 5
+  CantcatchDistance: 1
+  pushForce: 10
+  knockBackForce: 20
+  maxForce: 100
+  minReboundForce: 40
   timeToMax: 2
   timeToRebound: 1
   isHoldRock: 0
+  alreadyKnockback: 0
+  canHoldRock: 0
 --- !u!70 &818787333
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -1159,8 +1165,8 @@ Transform:
   m_GameObject: {fileID: 848672087}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.9239, y: -4.96, z: 0}
-  m_LocalScale: {x: 21.812433, y: 1, z: 1}
+  m_LocalPosition: {x: 3.89, y: -4.96, z: 0}
+  m_LocalScale: {x: 25.745214, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1328,7 +1334,7 @@ Transform:
   m_GameObject: {fileID: 1061885664}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 6.69, y: -0.22, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

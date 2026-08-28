@@ -6,6 +6,8 @@ using Unity.Mathematics;
 public class Player : MonoBehaviour
 {
     public float playerSpeed = 15f; //use
+    public float RunSpeed = 25f;
+    [SerializeField] private float currentSpeed = 0;
 
     public Rock rock;
     public QTEManager qteManager;
@@ -26,7 +28,10 @@ public class Player : MonoBehaviour
 
     //-----------------------------------------------------   Gun new value for push system
 
+    public float CantcatchDistance = 1f;
+
     public float pushForce = 0f;
+    public float knockBackForce = 0f;
 
     public float maxForce = 100f;
     public float minReboundForce = 5f;
@@ -39,6 +44,9 @@ public class Player : MonoBehaviour
     private bool statusGoingDown = false;
 
     public bool isHoldRock = false;
+    public bool alreadyKnockback = false;
+
+    [SerializeField] private bool canHoldRock = false;
 
     //-----------------------------------------------------
 
@@ -52,7 +60,14 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         playerCol = GetComponent<Collider2D>();
         rockCol = rock.GetComponent<Collider2D>();  
+
         lastPushTime = -pushCooldown;
+
+        currentSpeed = playerSpeed;
+    }
+    private void FixedUpdate()
+    {
+        rb.AddForce(autoWalkDir * currentSpeed);
     }
 
     void Update()
@@ -114,8 +129,17 @@ public class Player : MonoBehaviour
         }
         */
 
+        float distance = Physics2D.Distance(playerCol, rockCol).distance;
 
-            if (Input.GetKeyDown(KeyCode.Space)) 
+        if ((distance > CantcatchDistance)) // check for protect player press space when stone not in range for push or catch
+        {
+            canHoldRock = false;
+        }
+        else if (isHoldRock) // check is player holding a stone
+        {
+            currentSpeed = playerSpeed;
+
+            if (Input.GetKeyDown(KeyCode.Space)) //start charging push
             {
                 isCharging = true;
                 pushForce = 0f;
@@ -123,7 +147,7 @@ public class Player : MonoBehaviour
                 statusGoingDown = false;
             }
 
-            if (Input.GetKey(KeyCode.Space) && isCharging)
+            if (Input.GetKey(KeyCode.Space) && isCharging) // push force by time press
             {
                 timer += Time.deltaTime;
 
@@ -144,14 +168,51 @@ public class Player : MonoBehaviour
                     pushForce = Mathf.Lerp(maxForce, minReboundForce, t);
                 }
 
-                Debug.Log($" Force: {pushForce}");
+                //Debug.Log($" Force: {pushForce}");
             }
 
-            if (Input.GetKeyUp(KeyCode.Space) && isCharging)
+            if (Input.GetKeyUp(KeyCode.Space) && isCharging) // release space for push
             {
+                //print("work");
                 rock.PushRockUp(autoWalkDir, pushForce);
+                alreadyKnockback = false;
                 ResetCharge();
+                
             }
+        }
+        else // after push
+        {
+
+            currentSpeed = RunSpeed; // set to run
+            if (distance <= catchDistance)  // check stone in renge
+            {
+                canHoldRock = true;
+            }
+
+            if (canHoldRock && Input.GetKeyDown(KeyCode.Space)) // press for catch
+            {
+                isHoldRock = true;
+            }
+            
+            
+        }
+    }
+
+    private void OnCollisionStay(Collision collision) // not work      // if cant catch untill reach coli knockback player
+    {
+        print("check"); // print for check work but not work now
+        if (!isHoldRock) // check of protect player from KnockBack when can catch stone
+        {
+            GameObject GO = collision.gameObject;
+            if (GO != null)
+            {
+                if (GO.CompareTag("rock"))
+                {
+                    KnockBack();
+                    isHoldRock = true;
+                }
+            }
+        }
     }
 
     void ResetCharge()
@@ -162,21 +223,28 @@ public class Player : MonoBehaviour
         pushForce = 0f;
     }
 
-    private void FixedUpdate()
+    private void KnockBack() 
     {
-        rb.AddForce(autoWalkDir* playerSpeed);
+        print("back");
+        alreadyKnockback = true;
+        rb.AddForce(-autoWalkDir * knockBackForce, ForceMode2D.Impulse);
     }
+
+    
 
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, catchDistance);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, CantcatchDistance);
     }
         
-    private IEnumerator ShowMessage(TMP_Text textUI)
+    /*private IEnumerator ShowMessage(TMP_Text textUI)
     {
         textUI.gameObject.SetActive(true);
         yield return new WaitForSeconds(0.5f);
         textUI.gameObject.SetActive(false);
-    }
+    }*/
 }

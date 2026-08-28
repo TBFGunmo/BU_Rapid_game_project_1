@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class QTEManager : MonoBehaviour
+public class QTEManager : MonoBehaviour   //unuse now but will change to charging bar
 {
     public GameObject qtePanel;
     public RectTransform backgroundBar;
