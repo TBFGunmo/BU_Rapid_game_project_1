@@ -5,24 +5,33 @@ using System.Collections;
 public class Player : MonoBehaviour
 {
     public float playerSpeed = 15f;
-    public Rock rock;
 
+    public Rock rock;
     public QTEManager qteManager;
+    Collider2D playerCol;
+    Collider2D rockCol;
+
     public TMP_Text cooldownText;
     public TMP_Text outOfRangeText;
     public TMP_Text missedText;
+    private Rigidbody2D rb;
 
     public Vector2 autoWalkDir = new Vector2(-1f, 0.5f).normalized;
-    private Rigidbody2D rb;
 
     public float catchDistance = 2f;
     public float pushForce = 10f;
     public float pushCooldown = 1.0f;
     private float lastPushTime;
 
+    private Coroutine cdRoutine;
+    private Coroutine missedRoutine;
+    private Coroutine outOfRangeRoutine;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        playerCol = GetComponent<Collider2D>();
+        rockCol = rock.GetComponent<Collider2D>();  
         lastPushTime = -pushCooldown;
     }
 
@@ -41,8 +50,8 @@ public class Player : MonoBehaviour
                 }
                 else
                 {
-                    rock.ResumeRockNormal();
-                    StartCoroutine(ShowMissedMessage());
+                    if (missedRoutine != null) StopCoroutine(missedRoutine);
+                    missedRoutine = StartCoroutine(ShowMessage(missedText));
                 }
 
                 lastPushTime = Time.time;
@@ -51,8 +60,6 @@ public class Player : MonoBehaviour
 
             if (Time.time >= lastPushTime + pushCooldown)
             {
-                Collider2D playerCol = GetComponent<Collider2D>();
-                Collider2D rockCol = rock.GetComponent<Collider2D>();
                 float distance = Physics2D.Distance(playerCol, rockCol).distance;
 
                 if (distance <= catchDistance)
@@ -62,15 +69,15 @@ public class Player : MonoBehaviour
                 }
                 else
                 {
-                    StartCoroutine(ShowOutOfRangeMessage());
+                    if (outOfRangeRoutine != null) StopCoroutine(outOfRangeRoutine);
+                    outOfRangeRoutine = StartCoroutine(ShowMessage(outOfRangeText));
                 }
 
             }
             else
             {
-               
-                print("cdcd");
-                StartCoroutine(ShowCooldownMessage());
+                if (cdRoutine != null) StopCoroutine(cdRoutine);
+                cdRoutine = StartCoroutine(ShowMessage(cooldownText));
             }
 
         }
@@ -79,31 +86,18 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         rb.AddForce(autoWalkDir* playerSpeed);
-
     }
+
     void OnDrawGizmosSelected()
     {
-
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, catchDistance);
     }
 
-    private IEnumerator ShowCooldownMessage()
+    private IEnumerator ShowMessage(TMP_Text textUI)
     {
-        cooldownText.gameObject.SetActive(true);
+        textUI.gameObject.SetActive(true);
         yield return new WaitForSeconds(0.5f);
-        cooldownText.gameObject.SetActive(false);
-    }
-  private IEnumerator ShowOutOfRangeMessage()
-    {
-        outOfRangeText.gameObject.SetActive(true);
-        yield return new WaitForSeconds(0.5f);
-        outOfRangeText.gameObject.SetActive(false);
-    }
-  private IEnumerator ShowMissedMessage()
-    {
-        missedText.gameObject.SetActive(true);
-        yield return new WaitForSeconds(0.5f);
-        missedText.gameObject.SetActive(false);
+        textUI.gameObject.SetActive(false);
     }
 }

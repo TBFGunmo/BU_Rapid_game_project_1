@@ -23,7 +23,7 @@ public class Rock : MonoBehaviour
 
     public void StartSlowdown(float duration)
     {
-        StartCoroutine(SlowdownRoutine(duration));
+        slowCoroutine = StartCoroutine(SlowdownRoutine(duration));
     }
 
     private IEnumerator SlowdownRoutine(float duration)
