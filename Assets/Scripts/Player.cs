@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float currentSpeed = 0; // use
 
     public Rock rock;
-    public QTEManager qteManager; 
+    public UIChargeManager chargeManager; 
 
     Collider2D playerCol; // use
     Collider2D rockCol; // use
@@ -203,6 +203,8 @@ public class Player : MonoBehaviour
                         pushForce = Mathf.Lerp(maxForce, minReboundForce, t);
                     }
 
+                    chargeManager.UpdateChargeBar(pushForce, maxForce);
+
                     //Debug.Log($" Force: {pushForce}");
                 }
 
@@ -276,6 +278,11 @@ public class Player : MonoBehaviour
         statusGoingDown = false;
         timer = 0f;
         pushForce = 0f;
+
+        if (chargeManager != null)
+        {
+            chargeManager.ResetChargeBar();
+        }
     }
 
     private void KnockBack(float force) 
