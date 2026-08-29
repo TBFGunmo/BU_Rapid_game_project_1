@@ -6,6 +6,8 @@ public class Rock : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 oriVelocity;
 
+    public Player Player;
+
     private Coroutine slowCoroutine;
 
     void Start()
@@ -21,7 +23,7 @@ public class Rock : MonoBehaviour
         rb.AddForce(direction * force, ForceMode2D.Impulse);
     }
 
-    public void StartSlowdown(float duration)
+   /* public void StartSlowdown(float duration)
     {
         slowCoroutine = StartCoroutine(SlowdownRoutine(duration));
     }
@@ -41,6 +43,6 @@ public class Rock : MonoBehaviour
         if (slowCoroutine != null) StopCoroutine(slowCoroutine);
 
         rb.linearVelocity = oriVelocity;
-    }
+    }*/
 
 }

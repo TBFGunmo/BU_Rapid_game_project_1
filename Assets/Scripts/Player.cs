@@ -6,22 +6,23 @@ using Unity.Mathematics;
 public class Player : MonoBehaviour
 {
     public float playerSpeed = 15f; //use
-    public float RunSpeed = 25f;
-    [SerializeField] private float currentSpeed = 0;
+    public float RunSpeed = 25f; // use
+    [SerializeField] private float currentSpeed = 0; // use
 
     public Rock rock;
-    public QTEManager qteManager;
-    Collider2D playerCol;
-    Collider2D rockCol;
+    public QTEManager qteManager; 
+
+    Collider2D playerCol; // use
+    Collider2D rockCol; // use
 
     public TMP_Text cooldownText;
     public TMP_Text outOfRangeText;
     public TMP_Text missedText;
-    private Rigidbody2D rb;
+    private Rigidbody2D rb; // use
 
-    public Vector2 autoWalkDir = new Vector2(-1f, 0.5f).normalized;
+    public Vector2 autoWalkDir = new Vector2(-1f, 0.5f).normalized; // use
 
-    public float catchDistance = 2f;
+    public float catchDistance = 2f; // use
     //public float pushForce = 10f;
     public float pushCooldown = 1.0f;
     private float lastPushTime;
@@ -31,7 +32,7 @@ public class Player : MonoBehaviour
     public float CantcatchDistance = 1f;
 
     public float pushForce = 0f;
-    public float knockBackForce = 0f;
+    
 
     public float maxForce = 100f;
     public float minReboundForce = 5f;
@@ -48,12 +49,21 @@ public class Player : MonoBehaviour
 
     [SerializeField] private bool canHoldRock = false;
 
+    public float pushingRockForce = 2f;
+
+    // public float knockBackForce = 0f; // unuse
+    public float knockBackMultiplier = 1.5f; 
+    public float minKnockBackForce = 5f;   
+    public float maxKnockBackForce = 50f;
+
+    public float holdDistanceDuringKnockback = 1.2f;
+
     //-----------------------------------------------------
 
 
-    private Coroutine cdRoutine;
-    private Coroutine missedRoutine;
-    private Coroutine outOfRangeRoutine;
+    // private Coroutine cdRoutine;
+    // private Coroutine missedRoutine;
+    // private Coroutine outOfRangeRoutine;
 
     void Start()
     {
@@ -68,6 +78,11 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         rb.AddForce(autoWalkDir * currentSpeed);
+
+        if (isHoldRock)
+        {
+            rock.PushRockUp(autoWalkDir, pushingRockForce);
+        }
     }
 
     void Update()
@@ -176,6 +191,7 @@ public class Player : MonoBehaviour
                 //print("work");
                 rock.PushRockUp(autoWalkDir, pushForce);
                 alreadyKnockback = false;
+                isHoldRock = false;
                 ResetCharge();
                 
             }
@@ -198,9 +214,9 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnCollisionStay(Collision collision) // not work      // if cant catch untill reach coli knockback player
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        print("check"); // print for check work but not work now
+
         if (!isHoldRock) // check of protect player from KnockBack when can catch stone
         {
             GameObject GO = collision.gameObject;
@@ -208,12 +224,20 @@ public class Player : MonoBehaviour
             {
                 if (GO.CompareTag("rock"))
                 {
-                    KnockBack();
+                    print("check");
+
+                    float impactSpeed = collision.relativeVelocity.magnitude;
+                    float calculatedForce = impactSpeed * knockBackMultiplier;
+                    calculatedForce = Mathf.Clamp(calculatedForce, minKnockBackForce, maxKnockBackForce);
+
+                    KnockBack(calculatedForce);
                     isHoldRock = true;
                 }
             }
         }
     }
+  
+    
 
     void ResetCharge()
     {
@@ -223,14 +247,14 @@ public class Player : MonoBehaviour
         pushForce = 0f;
     }
 
-    private void KnockBack() 
+    private void KnockBack(float force) 
     {
-        print("back");
         alreadyKnockback = true;
-        rb.AddForce(-autoWalkDir * knockBackForce, ForceMode2D.Impulse);
-    }
+        rb.linearVelocity = Vector2.zero;
+        rb.AddForce(-autoWalkDir * force, ForceMode2D.Impulse);
 
-    
+        //rock.PushRockUp(-autoWalkDir, force*2);
+    }
 
     void OnDrawGizmosSelected()
     {
