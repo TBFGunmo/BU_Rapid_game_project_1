@@ -22,12 +22,17 @@ public class Player : MonoBehaviour
 
     public Vector2 autoWalkDir = new Vector2(-1f, 0.5f).normalized; // use
 
+    public Vector2 saveWalkDir; // use
+    public Vector2 prestartWalkDir = new Vector2(-1f, 0f).normalized; // use
+
     public float catchDistance = 2f; // use
     //public float pushForce = 10f;
     public float pushCooldown = 1.0f;
     private float lastPushTime;
 
     //-----------------------------------------------------   Gun new value for push system
+
+    public bool isStart = false;
 
     public float CantcatchDistance = 1f;
 
@@ -44,12 +49,13 @@ public class Player : MonoBehaviour
     private bool isCharging = false;
     private bool statusGoingDown = false;
 
-    public bool isHoldRock = false;
+    public bool isHoldRock = true;
     public bool alreadyKnockback = false;
 
     [SerializeField] private bool canHoldRock = false;
 
-    public float pushingRockForce = 2f;
+    public float pushingRockForceBegin = 5f;
+    public float pushingRockForceMain = 2f;
 
     // public float knockBackForce = 0f; // unuse
     public float knockBackMultiplier = 1.5f; 
@@ -69,19 +75,29 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         playerCol = GetComponent<Collider2D>();
-        rockCol = rock.GetComponent<Collider2D>();  
+        rockCol = rock.GetComponent<Collider2D>();
+
+        saveWalkDir = autoWalkDir;
+
+        autoWalkDir = prestartWalkDir;
 
         lastPushTime = -pushCooldown;
 
-        currentSpeed = playerSpeed;
+        currentSpeed = RunSpeed;
+
+
     }
     private void FixedUpdate()
     {
         rb.AddForce(autoWalkDir * currentSpeed);
 
-        if (isHoldRock)
+        if (isHoldRock && !isStart)
         {
-            rock.PushRockUp(autoWalkDir, pushingRockForce);
+            rock.PushRockUp(autoWalkDir, pushingRockForceBegin);
+        }
+        else if (isHoldRock) 
+        {
+            rock.PushRockUp(autoWalkDir, pushingRockForceMain);
         }
     }
 
@@ -144,74 +160,89 @@ public class Player : MonoBehaviour
         }
         */
 
-        float distance = Physics2D.Distance(playerCol, rockCol).distance;
-
-        if ((distance > CantcatchDistance)) // check for protect player press space when stone not in range for push or catch
+        if (isStart)
         {
-            canHoldRock = false;
-        }
-        else if (isHoldRock) // check is player holding a stone
-        {
-            currentSpeed = playerSpeed;
 
-            if (Input.GetKeyDown(KeyCode.Space)) //start charging push
+            float distance = Physics2D.Distance(playerCol, rockCol).distance;
+
+            if ((distance > CantcatchDistance)) // check for protect player press space when stone not in range for push or catch
             {
-                isCharging = true;
-                pushForce = 0f;
-                timer = 0f;
-                statusGoingDown = false;
-            }
-
-            if (Input.GetKey(KeyCode.Space) && isCharging) // push force by time press
-            {
-                timer += Time.deltaTime;
-
-                if (!statusGoingDown)
-                {
-                    float t = Mathf.Clamp01(timer / timeToMax);
-                    pushForce = Mathf.Lerp(0f, maxForce, t);
-
-                    if (timer >= timeToMax)
-                    {
-                        statusGoingDown = true;
-                        timer = 0f;
-                    }
-                }
-                else
-                {
-                    float t = Mathf.Clamp01(timer / timeToRebound);
-                    pushForce = Mathf.Lerp(maxForce, minReboundForce, t);
-                }
-
-                //Debug.Log($" Force: {pushForce}");
-            }
-
-            if (Input.GetKeyUp(KeyCode.Space) && isCharging) // release space for push
-            {
-                //print("work");
-                rock.PushRockUp(autoWalkDir, pushForce);
-                alreadyKnockback = false;
+                canHoldRock = false;
                 isHoldRock = false;
-                ResetCharge();
-                
+            }
+            else if (isHoldRock) // check is player holding a stone
+            {
+                currentSpeed = playerSpeed;
+
+                if (Input.GetKeyDown(KeyCode.Space)) //start charging push
+                {
+                    isCharging = true;
+                    pushForce = 0f;
+                    timer = 0f;
+                    statusGoingDown = false;
+                }
+
+                if (Input.GetKey(KeyCode.Space) && isCharging) // push force by time press
+                {
+                    timer += Time.deltaTime;
+
+                    if (!statusGoingDown)
+                    {
+                        float t = Mathf.Clamp01(timer / timeToMax);
+                        pushForce = Mathf.Lerp(0f, maxForce, t);
+
+                        if (timer >= timeToMax)
+                        {
+                            statusGoingDown = true;
+                            timer = 0f;
+                        }
+                    }
+                    else
+                    {
+                        float t = Mathf.Clamp01(timer / timeToRebound);
+                        pushForce = Mathf.Lerp(maxForce, minReboundForce, t);
+                    }
+
+                    //Debug.Log($" Force: {pushForce}");
+                }
+
+                if (Input.GetKeyUp(KeyCode.Space) && isCharging) // release space for push
+                {
+                    //print("work");
+                    rock.PushRockUp(autoWalkDir, pushForce);
+                    alreadyKnockback = false;
+                    isHoldRock = false;
+                    ResetCharge();
+
+                }
+            }
+            else // after push
+            {
+
+                currentSpeed = RunSpeed; // set to run
+                if (distance <= catchDistance)  // check stone in renge
+                {
+                    canHoldRock = true;
+                }
+
+                if (canHoldRock && Input.GetKeyDown(KeyCode.Space)) // press for catch
+                {
+                    isHoldRock = true;
+                }
+
+
             }
         }
-        else // after push
-        {
+    }
 
-            currentSpeed = RunSpeed; // set to run
-            if (distance <= catchDistance)  // check stone in renge
-            {
-                canHoldRock = true;
-            }
 
-            if (canHoldRock && Input.GetKeyDown(KeyCode.Space)) // press for catch
-            {
-                isHoldRock = true;
-            }
-            
-            
-        }
+    public void StartGame() 
+    {
+        isStart = true;
+        autoWalkDir = saveWalkDir;
+
+        currentSpeed = RunSpeed;
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -224,7 +255,7 @@ public class Player : MonoBehaviour
             {
                 if (GO.CompareTag("rock"))
                 {
-                    print("check");
+                    //print("check");
 
                     float impactSpeed = collision.relativeVelocity.magnitude;
                     float calculatedForce = impactSpeed * knockBackMultiplier;
@@ -249,11 +280,14 @@ public class Player : MonoBehaviour
 
     private void KnockBack(float force) 
     {
-        alreadyKnockback = true;
-        rb.linearVelocity = Vector2.zero;
-        rb.AddForce(-autoWalkDir * force, ForceMode2D.Impulse);
+        if (!alreadyKnockback)
+        {
+            alreadyKnockback = true;
+            rb.linearVelocity = Vector2.zero;
+            rb.AddForce(-autoWalkDir * force, ForceMode2D.Impulse);
 
-        //rock.PushRockUp(-autoWalkDir, force*2);
+            //rock.PushRockUp(-autoWalkDir, force * 2);
+        }
     }
 
     void OnDrawGizmosSelected()

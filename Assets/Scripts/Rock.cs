@@ -6,7 +6,7 @@ public class Rock : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 oriVelocity;
 
-    public Player Player;
+    //public Player Player;
 
     private Coroutine slowCoroutine;
 
