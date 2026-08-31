@@ -10,7 +10,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float currentSpeed = 0; // use
 
     public Rock rock;
-    public UIChargeManager chargeManager; 
+    public UIChargeManager chargeManager;
+    public GameObject pushIconUI;
 
     Collider2D playerCol; // use
     Collider2D rockCol; // use
@@ -214,6 +215,7 @@ public class Player : MonoBehaviour
                     rock.PushRockUp(autoWalkDir, pushForce);
                     alreadyKnockback = false;
                     isHoldRock = false;
+                    lastPushTime = Time.time;
                     ResetCharge();
 
                 }
@@ -233,6 +235,11 @@ public class Player : MonoBehaviour
                 }
 
 
+            }
+            if (pushIconUI != null)
+            {
+                bool showIcon = !isHoldRock && (distance <= catchDistance) && (Time.time > lastPushTime + 0.5f);
+                pushIconUI.SetActive(showIcon);
             }
         }
     }
