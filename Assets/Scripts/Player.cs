@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     public Rock rock;
     public UIChargeManager chargeManager;
     public GameObject pushIconUI;
+    public GameObject missedIconUI;
 
     Collider2D playerCol; // use
     Collider2D rockCol; // use
@@ -67,10 +68,7 @@ public class Player : MonoBehaviour
 
     //-----------------------------------------------------
 
-
-    // private Coroutine cdRoutine;
-    // private Coroutine missedRoutine;
-    // private Coroutine outOfRangeRoutine;
+    private Coroutine missedRoutine;
 
     void Start()
     {
@@ -85,7 +83,6 @@ public class Player : MonoBehaviour
         lastPushTime = -pushCooldown;
 
         currentSpeed = RunSpeed;
-
 
     }
     private void FixedUpdate()
@@ -232,6 +229,8 @@ public class Player : MonoBehaviour
                 if (canHoldRock && Input.GetKeyDown(KeyCode.Space)) // press for catch
                 {
                     isHoldRock = true;
+
+                    missedIconUI.SetActive(false);
                 }
 
 
@@ -271,14 +270,16 @@ public class Player : MonoBehaviour
                     calculatedForce = Mathf.Clamp(calculatedForce, minKnockBackForce, maxKnockBackForce);
 
                     KnockBack(calculatedForce);
+
+                    StartCoroutine(ShowMissedUI());
+
                     isHoldRock = true;
                 }
             }
         }
+
     }
   
-    
-
     void ResetCharge()
     {
         isCharging = false;
@@ -312,11 +313,21 @@ public class Player : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, CantcatchDistance);
     }
-        
+
     /*private IEnumerator ShowMessage(TMP_Text textUI)
     {
         textUI.gameObject.SetActive(true);
         yield return new WaitForSeconds(0.5f);
         textUI.gameObject.SetActive(false);
     }*/
+
+    private IEnumerator ShowMissedUI()
+    {
+        if (missedIconUI != null)
+        {
+            missedIconUI.SetActive(true);
+            yield return new WaitForSeconds(1.0f); 
+            missedIconUI.SetActive(false);
+        }
+    }
 }
