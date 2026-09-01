@@ -94,6 +94,7 @@ public class Player : MonoBehaviour
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = sprite_90degree;
+
     }
     private void FixedUpdate()
     {
@@ -266,7 +267,7 @@ public class Player : MonoBehaviour
         autoWalkDir = saveWalkDir;
 
         currentSpeed = RunSpeed;
-
+   
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
