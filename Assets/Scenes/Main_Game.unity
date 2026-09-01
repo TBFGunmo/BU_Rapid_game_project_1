@@ -17514,7 +17514,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &224416014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17626,7 +17626,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &246976003
 Transform:
   m_ObjectHideFlags: 0
@@ -19910,7 +19910,7 @@ MonoBehaviour:
   RunSpeed: 20
   currentSpeed: 0
   rock: {fileID: 765773639}
-  chargeManager: {fileID: 1754399780}
+  chargeManager: {fileID: 1578596352}
   pushIconUI: {fileID: 357438694}
   missedIconUI: {fileID: 1696636339}
   catchRingObj: {fileID: 439109121}
@@ -20004,6 +20004,64 @@ CapsuleCollider2D:
   m_Offset: {x: 0.05905585, y: 0.85628843}
   m_Size: {x: 10.698114, y: 13.557172}
   m_Direction: 0
+--- !u!1 &824162270
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 824162272}
+  - component: {fileID: 824162271}
+  m_Layer: 0
+  m_Name: LoseCutsceneManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &824162271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 824162270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eb628966b874ff4ca348209fb741299, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LoseCutscene
+  mainCamera: {fileID: 1061885666}
+  endCamera: {fileID: 993611366}
+  volcanoPoint: {fileID: 1742435659}
+  skyPoint: {fileID: 939654264}
+  villagePoint: {fileID: 1869608131}
+  timeToVolcano: 1.5
+  delayAtVolcano: 1
+  timeToSky: 1.5
+  timeToVillage: 4
+  zoomInSize: 4
+  zoomInTime: 1
+  shakeIntensity: 0.5
+  RedRockPrefab: {fileID: 2957146818722650730, guid: 8ba8dec33c0b09043a6bc60fa27d18e4, type: 3}
+  rockRotationSpeed: 360
+--- !u!4 &824162272
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 824162270}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -72.63766, y: 62.02737, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &848672087
 GameObject:
   m_ObjectHideFlags: 0
@@ -20299,6 +20357,37 @@ Transform:
   - {fileID: 171951973}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &939654263
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 939654264}
+  m_Layer: 0
+  m_Name: SkyPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &939654264
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939654263}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 50.8, y: -16.48, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1208252517}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &946844712
 GameObject:
   m_ObjectHideFlags: 0
@@ -20409,7 +20498,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &993611365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21097,6 +21186,9 @@ Transform:
   m_Children:
   - {fileID: 1895407657}
   - {fileID: 282969675}
+  - {fileID: 1742435659}
+  - {fileID: 1869608131}
+  - {fileID: 939654264}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1222943514
@@ -22259,6 +22351,7 @@ GameObject:
   - component: {fileID: 1578596349}
   - component: {fileID: 1578596351}
   - component: {fileID: 1578596350}
+  - component: {fileID: 1578596352}
   m_Layer: 5
   m_Name: ChargeMeter
   m_TagString: Untagged
@@ -22324,6 +22417,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1578596348}
   m_CullTransparentMesh: 1
+--- !u!114 &1578596352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578596348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 258e24fbcee8c2c48b51f39c2df3390c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIChargeManager
+  needlePivot: {fileID: 130073445}
+  minAngle: 90
+  maxAngle: -90
 --- !u!1 &1641804598
 GameObject:
   m_ObjectHideFlags: 0
@@ -22627,6 +22735,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1696636339}
   m_CullTransparentMesh: 1
+--- !u!1 &1742435658
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1742435659}
+  m_Layer: 0
+  m_Name: VolcanoPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1742435659
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1742435658}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.98, y: 2.32, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1208252517}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1754399779
 GameObject:
   m_ObjectHideFlags: 0
@@ -22636,7 +22775,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1754399781}
-  - component: {fileID: 1754399780}
   - component: {fileID: 1754399782}
   m_Layer: 0
   m_Name: GameManager
@@ -22645,21 +22783,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1754399780
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1754399779}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 258e24fbcee8c2c48b51f39c2df3390c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UIChargeManager
-  needlePivot: {fileID: 130073445}
-  minAngle: 90
-  maxAngle: -90
 --- !u!4 &1754399781
 Transform:
   m_ObjectHideFlags: 0
@@ -22689,7 +22812,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   player: {fileID: 818787332}
   rockCut: {fileID: 765773644}
-  timeGame: 75
+  loseCut: {fileID: 824162271}
+  timeGame: 10
   timeText: {fileID: 1901963835}
   winPanel: {fileID: 1689493740}
   losePanel: {fileID: 1843883418}
@@ -23194,6 +23318,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b4b5326861c9fa4d904c0ed36761e2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StartBox
+--- !u!1 &1869608130
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1869608131}
+  m_Layer: 0
+  m_Name: VillagePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1869608131
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869608130}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 93.94, y: -65.16, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1208252517}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1879922740
 GameObject:
   m_ObjectHideFlags: 0
@@ -23991,6 +24146,7 @@ SceneRoots:
   - {fileID: 1867585406}
   - {fileID: 497874992}
   - {fileID: 1754399781}
+  - {fileID: 824162272}
   - {fileID: 224416017}
   - {fileID: 1904127064}
   - {fileID: 1136179484}

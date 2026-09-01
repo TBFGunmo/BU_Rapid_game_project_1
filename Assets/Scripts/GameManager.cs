@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     public Player player;
     public RockCutscene rockCut;
+    public LoseCutscene loseCut;
 
     public float timeGame = 60f;
     private float timeRemain;
@@ -72,7 +73,6 @@ public class GameManager : MonoBehaviour
 
     void UpdateTimerUI()
     {
-      
         int minutes = Mathf.FloorToInt(timeRemain / 60);
         int seconds = Mathf.FloorToInt(timeRemain % 60);
         timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
@@ -86,14 +86,6 @@ public class GameManager : MonoBehaviour
         {
             timeText.color = Color.white;
         }
-    }
-
-    public void GameOver()
-    {
-        timeIsRun = false;
-        losePanel.SetActive(true);
-        StopPlayer();
-        Time.timeScale = 0f;
     }
 
     public void GameWin()
@@ -115,6 +107,18 @@ public class GameManager : MonoBehaviour
     {
         winPanel.SetActive(true);
     }
+    public void LoseUI()
+    {
+        losePanel.SetActive(true);
+    }
+
+    public void GameOver()
+    {
+        timeIsRun = false;
+        StopPlayer();
+
+        loseCut.PlayLoseCutscene();
+    }
 
     void StopPlayer()
     { 
@@ -122,9 +126,22 @@ public class GameManager : MonoBehaviour
         {
             player.isStart = false;
             player.gameEnd = true;
-            player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
-            player.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+
+            Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.bodyType = RigidbodyType2D.Kinematic;
+                rb.linearVelocity = Vector2.zero;
+            }
+            //player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+            //player.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+
+            print("bardeleate");
+            if (player.chargeManager != null) player.chargeManager.gameObject.SetActive(false);
+            if (player.catchRingObj != null) player.catchRingObj.SetActive(false);
+            if (player.pushIconUI != null) player.pushIconUI.SetActive(false);
+            if (player.missedIconUI != null) player.missedIconUI.SetActive(false);
         }
     }
 
-}
+}   
