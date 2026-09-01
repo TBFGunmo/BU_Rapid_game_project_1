@@ -20,6 +20,10 @@ public class Player : MonoBehaviour
     public GameObject pushIconUI;
     public GameObject missedIconUI;
 
+    public GameObject catchRingObj;
+    public float minRingScale = 1.0f; 
+    public float maxRingScale = 5.0f; 
+
     Collider2D playerCol; // use
     Collider2D rockCol; // use
 
@@ -41,8 +45,6 @@ public class Player : MonoBehaviour
     //-----------------------------------------------------   Gun new value for push system
 
     public bool isStart = false;
-
-    public float CantcatchDistance = 1f;
 
     public float pushForce = 0f;
     
@@ -177,10 +179,24 @@ public class Player : MonoBehaviour
                 changesprite = true;
             }
 
-
             float distance = Physics2D.Distance(playerCol, rockCol).distance;
 
-            if ((distance > CantcatchDistance)) // check for protect player press space when stone not in range for push or catch
+            if (catchRingObj != null)
+            {
+                if (isHoldRock)
+                { 
+                    catchRingObj.SetActive(false);
+                }
+                else
+                {
+                    catchRingObj.SetActive(true);
+                    float t = Mathf.InverseLerp(catchDistance, 20.0f, distance);
+                    float currentScale = Mathf.Lerp(minRingScale, maxRingScale, t);
+                    catchRingObj.transform.localScale = new Vector2(currentScale, currentScale);
+                }
+            }
+
+            if ((distance > catchDistance)) // check for protect player press space when stone not in range for push or catch
             {
                 canHoldRock = false;
                 isHoldRock = false;
@@ -326,9 +342,6 @@ public class Player : MonoBehaviour
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, catchDistance);
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, CantcatchDistance);
     }
 
     /*private IEnumerator ShowMessage(TMP_Text textUI)
