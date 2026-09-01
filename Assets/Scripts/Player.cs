@@ -6,8 +6,10 @@ using Unity.Mathematics;
 public class Player : MonoBehaviour
 {
 
-    public GameObject sprite_45degree;
-    public GameObject sprite_90degree;
+    public Sprite sprite_45degree;
+    public Sprite sprite_90degree;
+
+    private SpriteRenderer spriteRenderer;
 
     public float playerSpeed = 15f; //use
     public float RunSpeed = 25f; // use
@@ -70,6 +72,8 @@ public class Player : MonoBehaviour
 
     public float holdDistanceDuringKnockback = 1.2f;
 
+    private bool changesprite = false;
+
     //-----------------------------------------------------
 
     private Coroutine missedRoutine;
@@ -88,6 +92,8 @@ public class Player : MonoBehaviour
 
         currentSpeed = RunSpeed;
 
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.sprite = sprite_90degree;
     }
     private void FixedUpdate()
     {
@@ -164,6 +170,12 @@ public class Player : MonoBehaviour
 
         if (isStart)
         {
+            if (!changesprite)
+            {
+                spriteRenderer.sprite = sprite_45degree;
+                changesprite = true;
+            }
+
 
             float distance = Physics2D.Distance(playerCol, rockCol).distance;
 
