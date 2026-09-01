@@ -77,7 +77,7 @@ public class Player : MonoBehaviour
 
     private bool changesprite = false;
 
-    public bool gameEnd = false;
+    public bool gameEnd = true;
 
     //-----------------------------------------------------
 
