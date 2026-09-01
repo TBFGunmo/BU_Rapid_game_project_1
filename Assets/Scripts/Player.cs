@@ -1,7 +1,8 @@
-using UnityEngine;
-using TMPro;
 using System.Collections;
+using TMPro;
 using Unity.Mathematics;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
@@ -76,6 +77,8 @@ public class Player : MonoBehaviour
 
     private bool changesprite = false;
 
+    public bool gameEnd = false;
+
     //-----------------------------------------------------
 
     private Coroutine missedRoutine;
@@ -100,15 +103,18 @@ public class Player : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        rb.AddForce(autoWalkDir * currentSpeed);
+        if (!gameEnd)
+        {
+            rb.AddForce(autoWalkDir * currentSpeed);
 
-        if (isHoldRock && !isStart)
-        {
-            rock.PushRockUp(autoWalkDir, pushingRockForceBegin);
-        }
-        else if (isHoldRock) 
-        {
-            rock.PushRockUp(autoWalkDir, pushingRockForceMain);
+            if (isHoldRock && !isStart)
+            {
+                rock.PushRockUp(autoWalkDir, pushingRockForceBegin);
+            }
+            else if (isHoldRock)
+            {
+                rock.PushRockUp(autoWalkDir, pushingRockForceMain);
+            }
         }
     }
 
@@ -171,107 +177,110 @@ public class Player : MonoBehaviour
         }
         */
 
-        if (isStart)
+        if (!gameEnd)
         {
-            if (!changesprite)
+            if (isStart)
             {
-                spriteRenderer.sprite = sprite_45degree;
-                changesprite = true;
-            }
-
-            float distance = Physics2D.Distance(playerCol, rockCol).distance;
-
-            if (catchRingObj != null)
-            {
-                if (isHoldRock)
-                { 
-                    catchRingObj.SetActive(false);
-                }
-                else
+                if (!changesprite)
                 {
-                    catchRingObj.SetActive(true);
-                    float t = Mathf.InverseLerp(catchDistance, 20.0f, distance);
-                    float currentScale = Mathf.Lerp(minRingScale, maxRingScale, t);
-                    catchRingObj.transform.localScale = new Vector2(currentScale, currentScale);
-                }
-            }
-
-            if ((distance > catchDistance)) // check for protect player press space when stone not in range for push or catch
-            {
-                canHoldRock = false;
-                isHoldRock = false;
-            }
-            else if (isHoldRock) // check is player holding a stone
-            {
-                currentSpeed = playerSpeed;
-
-                if (Input.GetKeyDown(KeyCode.Space)) //start charging push
-                {
-                    isCharging = true;
-                    pushForce = 0f;
-                    timer = 0f;
-                    statusGoingDown = false;
+                    spriteRenderer.sprite = sprite_45degree;
+                    changesprite = true;
                 }
 
-                if (Input.GetKey(KeyCode.Space) && isCharging) // push force by time press
-                {
-                    timer += Time.deltaTime;
+                float distance = Physics2D.Distance(playerCol, rockCol).distance;
 
-                    if (!statusGoingDown)
+                if (catchRingObj != null)
+                {
+                    if (isHoldRock)
                     {
-                        float t = Mathf.Clamp01(timer / timeToMax);
-                        pushForce = Mathf.Lerp(0f, maxForce, t);
-
-                        if (timer >= timeToMax)
-                        {
-                            statusGoingDown = true;
-                            timer = 0f;
-                        }
+                        catchRingObj.SetActive(false);
                     }
                     else
                     {
-                        float t = Mathf.Clamp01(timer / timeToRebound);
-                        pushForce = Mathf.Lerp(maxForce, minReboundForce, t);
+                        catchRingObj.SetActive(true);
+                        float t = Mathf.InverseLerp(catchDistance, 20.0f, distance);
+                        float currentScale = Mathf.Lerp(minRingScale, maxRingScale, t);
+                        catchRingObj.transform.localScale = new Vector2(currentScale, currentScale);
+                    }
+                }
+
+                if ((distance > catchDistance)) // check for protect player press space when stone not in range for push or catch
+                {
+                    canHoldRock = false;
+                    isHoldRock = false;
+                }
+                else if (isHoldRock) // check is player holding a stone
+                {
+                    currentSpeed = playerSpeed;
+
+                    if (Input.GetKeyDown(KeyCode.Space)) //start charging push
+                    {
+                        isCharging = true;
+                        pushForce = 0f;
+                        timer = 0f;
+                        statusGoingDown = false;
                     }
 
-                    chargeManager.UpdateChargeBar(pushForce, maxForce);
+                    if (Input.GetKey(KeyCode.Space) && isCharging) // push force by time press
+                    {
+                        timer += Time.deltaTime;
 
-                    //Debug.Log($" Force: {pushForce}");
+                        if (!statusGoingDown)
+                        {
+                            float t = Mathf.Clamp01(timer / timeToMax);
+                            pushForce = Mathf.Lerp(0f, maxForce, t);
+
+                            if (timer >= timeToMax)
+                            {
+                                statusGoingDown = true;
+                                timer = 0f;
+                            }
+                        }
+                        else
+                        {
+                            float t = Mathf.Clamp01(timer / timeToRebound);
+                            pushForce = Mathf.Lerp(maxForce, minReboundForce, t);
+                        }
+
+                        chargeManager.UpdateChargeBar(pushForce, maxForce);
+
+                        //Debug.Log($" Force: {pushForce}");
+                    }
+
+                    if (Input.GetKeyUp(KeyCode.Space) && isCharging) // release space for push
+                    {
+                        //print("work");
+                        rock.PushRockUp(autoWalkDir, pushForce);
+                        alreadyKnockback = false;
+                        isHoldRock = false;
+                        lastPushTime = Time.time;
+                        ResetCharge();
+
+                    }
                 }
-
-                if (Input.GetKeyUp(KeyCode.Space) && isCharging) // release space for push
+                else // after push
                 {
-                    //print("work");
-                    rock.PushRockUp(autoWalkDir, pushForce);
-                    alreadyKnockback = false;
-                    isHoldRock = false;
-                    lastPushTime = Time.time;
-                    ResetCharge();
+
+                    currentSpeed = RunSpeed; // set to run
+                    if (distance <= catchDistance)  // check stone in renge
+                    {
+                        canHoldRock = true;
+                    }
+
+                    if (canHoldRock && Input.GetKeyDown(KeyCode.Space)) // press for catch
+                    {
+                        isHoldRock = true;
+
+                        missedIconUI.SetActive(false);
+                    }
+
 
                 }
-            }
-            else // after push
-            {
-
-                currentSpeed = RunSpeed; // set to run
-                if (distance <= catchDistance)  // check stone in renge
+                if (pushIconUI != null)
                 {
-                    canHoldRock = true;
+                    bool showIcon = !isHoldRock && (distance <= catchDistance) && (Time.time > lastPushTime + 0.5f);
+                    pushIconUI.SetActive(showIcon);
                 }
-
-                if (canHoldRock && Input.GetKeyDown(KeyCode.Space)) // press for catch
-                {
-                    isHoldRock = true;
-
-                    missedIconUI.SetActive(false);
-                }
-
-
-            }
-            if (pushIconUI != null)
-            {
-                bool showIcon = !isHoldRock && (distance <= catchDistance) && (Time.time > lastPushTime + 0.5f);
-                pushIconUI.SetActive(showIcon);
             }
         }
     }
@@ -288,25 +297,27 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-
-        if (!isHoldRock) // check of protect player from KnockBack when can catch stone
+        if (!gameEnd)
         {
-            GameObject GO = collision.gameObject;
-            if (GO != null)
+            if (!isHoldRock) // check of protect player from KnockBack when can catch stone
             {
-                if (GO.CompareTag("rock"))
+                GameObject GO = collision.gameObject;
+                if (GO != null)
                 {
-                    //print("check");
+                    if (GO.CompareTag("rock"))
+                    {
+                        //print("check");
 
-                    float impactSpeed = collision.relativeVelocity.magnitude;
-                    float calculatedForce = impactSpeed * knockBackMultiplier;
-                    calculatedForce = Mathf.Clamp(calculatedForce, minKnockBackForce, maxKnockBackForce);
+                        float impactSpeed = collision.relativeVelocity.magnitude;
+                        float calculatedForce = impactSpeed * knockBackMultiplier;
+                        calculatedForce = Mathf.Clamp(calculatedForce, minKnockBackForce, maxKnockBackForce);
 
-                    KnockBack(calculatedForce);
+                        KnockBack(calculatedForce);
 
-                    StartCoroutine(ShowMissedUI());
+                        StartCoroutine(ShowMissedUI());
 
-                    isHoldRock = true;
+                        isHoldRock = true;
+                    }
                 }
             }
         }
@@ -353,11 +364,14 @@ public class Player : MonoBehaviour
 
     private IEnumerator ShowMissedUI()
     {
-        if (missedIconUI != null)
+        if (!gameEnd)
         {
-            missedIconUI.SetActive(true);
-            yield return new WaitForSeconds(1.0f); 
-            missedIconUI.SetActive(false);
+            if (missedIconUI != null)
+            {
+                missedIconUI.SetActive(true);
+                yield return new WaitForSeconds(1.0f);
+                missedIconUI.SetActive(false);
+            }
         }
     }
 }

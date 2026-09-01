@@ -103,12 +103,17 @@ public class GameManager : MonoBehaviour
             return; 
         }
         timeIsRun = false;
-        winPanel.SetActive(true);
+        
         StopPlayer();
 
         rockCut.PlayWinCutscene();
 
-        Time.timeScale = 0f;
+        //Time.timeScale = 0f;
+    }
+
+    public void WinUI() 
+    {
+        winPanel.SetActive(true);
     }
 
     void StopPlayer()
@@ -116,6 +121,8 @@ public class GameManager : MonoBehaviour
         if (player != null)
         {
             player.isStart = false;
+            player.gameEnd = true;
+            player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
             player.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
         }
     }

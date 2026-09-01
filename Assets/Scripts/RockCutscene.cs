@@ -14,6 +14,8 @@ public class RockCutscene : MonoBehaviour
 
     private Rigidbody2D rb;
 
+    public Camera winCamera;
+    public Camera mainCamera;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -24,6 +26,9 @@ public class RockCutscene : MonoBehaviour
 
     public void PlayWinCutscene()
     {
+        mainCamera.enabled = false;
+        winCamera.enabled = true;
+
         StartCoroutine(BounceRoutine2D());
     }
 
@@ -44,7 +49,7 @@ public class RockCutscene : MonoBehaviour
             while (timer < timePerBounce)
             {
                 timer += Time.deltaTime;
-                float t = timer / timePerBounce; 
+                float t = timer / timePerBounce;
 
                 Vector3 currentPos = Vector3.Lerp(startPos, endPos, t);
 
@@ -62,7 +67,9 @@ public class RockCutscene : MonoBehaviour
 
         }
 
-        Debug.Log("¤Ñµ«Õ¹ª¹Ð¨ºáÅéÇ!");
+        //Debug.Log("End");
+
+        GameManager.Instance.WinUI();
 
 
     }
