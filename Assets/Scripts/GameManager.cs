@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     public Player player;
+    public RockCutscene rockCut;
 
     public float timeGame = 60f;
     private float timeRemain;
@@ -104,6 +105,9 @@ public class GameManager : MonoBehaviour
         timeIsRun = false;
         winPanel.SetActive(true);
         StopPlayer();
+
+        rockCut.PlayWinCutscene();
+
         Time.timeScale = 0f;
     }
 
