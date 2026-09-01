@@ -5,6 +5,10 @@ using Unity.Mathematics;
 
 public class Player : MonoBehaviour
 {
+
+    public GameObject sprite_45degree;
+    public GameObject sprite_90degree;
+
     public float playerSpeed = 15f; //use
     public float RunSpeed = 25f; // use
     [SerializeField] private float currentSpeed = 0; // use
