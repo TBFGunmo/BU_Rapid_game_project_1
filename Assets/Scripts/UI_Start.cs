@@ -38,6 +38,13 @@ public class UI_Start : MonoBehaviour
 
                     Comic[currentA].SetActive(true);
                     currentA++;
+
+                    if (!((currentA + 1) <= Comic.Length) )
+                    {
+                        endComic = true;
+                        currentA = 0;
+                    }
+
                 }
                 else
                 {
@@ -56,6 +63,12 @@ public class UI_Start : MonoBehaviour
 
                     tutorial[currentA].SetActive(true);
                     currentA++;
+
+                    if (!((currentA + 1) <= tutorial.Length))
+                    {
+                        endTutorial = true;
+                        currentA = 0;
+                    }
                 }
                 else
                 {

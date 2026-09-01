@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public LoseCutscene loseCut;
 
     public float timeGame = 60f;
-    private float timeRemain;
+    public float timeRemain;
     private bool timeIsRun = false;
     private bool gameHasStarted = false;
 

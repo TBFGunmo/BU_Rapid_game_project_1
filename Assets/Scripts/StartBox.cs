@@ -9,6 +9,9 @@ public class StartBox : MonoBehaviour
         {
             print("check_2");
             GameManager.Instance.StartGame();
+
+            VolcanoManager.instant.StartSpawn();
+
         }
     }
 }

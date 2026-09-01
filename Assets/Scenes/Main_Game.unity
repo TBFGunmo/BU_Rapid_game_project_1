@@ -17626,7 +17626,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &246976003
 Transform:
   m_ObjectHideFlags: 0
@@ -17660,6 +17660,63 @@ MonoBehaviour:
   - {fileID: 1824206864}
   tutorial:
   - {fileID: 1179912372}
+--- !u!1 &273187676
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 273187678}
+  - component: {fileID: 273187677}
+  m_Layer: 0
+  m_Name: VolcanoManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &273187677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273187676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc345c1bb5d46494799aba3e6e6233ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VolcanoManager
+  player: {fileID: 818787331}
+  rockPrefab: {fileID: 2957146818722650730, guid: 2ce0f160355b20f4a92243b68a7addf3, type: 3}
+  warningPrefab: {fileID: 876930934467486353, guid: b8bb6e13c82520f48bedfcde94bef40c, type: 3}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  spawnRadius: 6
+  fallHeight: 20
+  warningTime: 2
+  maxTime: 0
+  currentTime: 0
+  slowSpawnRate: 7.5
+  fastSpawnRate: 2
+--- !u!4 &273187678
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273187676}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 878.703, y: 493.85278, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &282969674
 GameObject:
   m_ObjectHideFlags: 0
@@ -19939,7 +19996,7 @@ MonoBehaviour:
   minKnockBackForce: 1
   maxKnockBackForce: 50
   holdDistanceDuringKnockback: 1
-  gameEnd: 0
+  gameEnd: 1
 --- !u!50 &818787334
 Rigidbody2D:
   serializedVersion: 5
@@ -20073,9 +20130,9 @@ GameObject:
   - component: {fileID: 848672090}
   - component: {fileID: 848672089}
   - component: {fileID: 848672088}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -21922,9 +21979,9 @@ GameObject:
   - component: {fileID: 1497580853}
   - component: {fileID: 1497580852}
   - component: {fileID: 1497580851}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Moutain
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -22813,7 +22870,8 @@ MonoBehaviour:
   player: {fileID: 818787332}
   rockCut: {fileID: 765773644}
   loseCut: {fileID: 824162271}
-  timeGame: 10
+  timeGame: 100
+  timeRemain: 0
   timeText: {fileID: 1901963835}
   winPanel: {fileID: 1689493740}
   losePanel: {fileID: 1843883418}
@@ -24153,3 +24211,4 @@ SceneRoots:
   - {fileID: 935644990}
   - {fileID: 1208252517}
   - {fileID: 246976003}
+  - {fileID: 273187678}
