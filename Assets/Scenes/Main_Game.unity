@@ -17691,17 +17691,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VolcanoManager
   player: {fileID: 818787331}
   rockPrefab: {fileID: 2957146818722650730, guid: 2ce0f160355b20f4a92243b68a7addf3, type: 3}
-  warningPrefab: {fileID: 876930934467486353, guid: b8bb6e13c82520f48bedfcde94bef40c, type: 3}
+  shadowPrefab: {fileID: 5315187973601505980, guid: befcc295842fac344a4f211466256552, type: 3}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
   spawnRadius: 6
-  fallHeight: 20
-  warningTime: 2
+  fallHeight: 13
+  warningTime: 1.5
   maxTime: 0
   currentTime: 0
   slowSpawnRate: 7.5
   fastSpawnRate: 2
+  shakeDuration: 1
+  shakeIntensity: 0.15
+  earthquakeSound: {fileID: 8300000, guid: 59b8ebb31cf61e143b9495912a954f8f, type: 3}
+  meteorSound: {fileID: 8300000, guid: 424c61678c8d16e44ae4559d097f3615, type: 3}
+  maxMeteorVolume: 0.5
 --- !u!4 &273187678
 Transform:
   m_ObjectHideFlags: 0
@@ -19494,7 +19499,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 6
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2182124076254010665, guid: 702e4853c47b35640b74339e39fad46d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -19685,6 +19690,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FollowCamera
   player: {fileID: 765773638}
+  shakeOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &804740059
 GameObject:
   m_ObjectHideFlags: 0
@@ -19921,7 +19927,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 11
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: db032bed37d5b3f4081fceacbc57eb26, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -21001,6 +21007,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FollowCamera
   player: {fileID: 818787329}
+  shakeOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &1067621589
 GameObject:
   m_ObjectHideFlags: 0

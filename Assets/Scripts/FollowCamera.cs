@@ -3,6 +3,7 @@ using UnityEngine;
 public class FollowCamera : MonoBehaviour
 {
     public GameObject player;
+    public Vector3 shakeOffset;
 
     private void LateUpdate()
     {
@@ -10,7 +11,7 @@ public class FollowCamera : MonoBehaviour
             player.transform.position.x,
             player.transform.position.y,
             transform.position.z
-        );
+        ) + shakeOffset; 
     }
 }
 
