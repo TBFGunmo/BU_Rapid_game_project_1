@@ -100,6 +100,8 @@ public class Player : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = sprite_90degree;
 
+        if (chargeManager != null) chargeManager.gameObject.SetActive(false);
+
     }
     private void FixedUpdate()
     {
@@ -292,7 +294,9 @@ public class Player : MonoBehaviour
         autoWalkDir = saveWalkDir;
 
         currentSpeed = RunSpeed;
-   
+
+        if (chargeManager != null) chargeManager.gameObject.SetActive(true);
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

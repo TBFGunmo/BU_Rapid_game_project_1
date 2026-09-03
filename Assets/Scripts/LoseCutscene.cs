@@ -28,6 +28,13 @@ public class LoseCutscene : MonoBehaviour
     public GameObject RedRockPrefab; 
     public float rockRotationSpeed = 360f;
 
+    [Header("Explosion & Fire Effects")]
+    public GameObject[] fireVfxPrefabs; 
+    public Transform[] fireSpawnPoints; 
+    public AudioClip villageExplosionSound;
+    public float explosionShakeIntensity = 0.8f;
+    public float explosionShakeDuration = 0.5f;
+
     public void PlayLoseCutscene()
     {
         StartCoroutine(CutsceneRoutine());
@@ -119,9 +126,39 @@ public class LoseCutscene : MonoBehaviour
         if (meteor != null)
         {
             meteor.SetActive(false);
+
+            if (villageExplosionSound != null)
+            {
+                AudioSource.PlayClipAtPoint(villageExplosionSound, villagePoint.position);
+            }
+
+            if (fireSpawnPoints != null && fireVfxPrefabs != null && fireVfxPrefabs.Length > 0)
+            {
+                foreach (Transform spawnPoint in fireSpawnPoints)
+                {
+                    if (spawnPoint != null)
+                    {
+                        int randomIndex = Random.Range(0, fireVfxPrefabs.Length);
+                        GameObject randomVfx = fireVfxPrefabs[randomIndex];
+
+                        Instantiate(randomVfx, spawnPoint.position, Quaternion.identity);
+                    }
+                }
+            }
         }
 
-        yield return new WaitForSeconds(3.0f);
+        float finalShakeTimer = 0f;
+        Vector3 finalCamPos = endCamera.transform.position;
+        while (finalShakeTimer < explosionShakeDuration)
+        {
+            finalShakeTimer += Time.deltaTime;
+            Vector2 shakeOffset = Random.insideUnitCircle * explosionShakeIntensity;
+            endCamera.transform.position = finalCamPos + new Vector3(shakeOffset.x, shakeOffset.y, 0f);
+            yield return null;
+        }
+        endCamera.transform.position = finalCamPos;
+
+        yield return new WaitForSeconds(3.0f - explosionShakeDuration);
         GameManager.Instance.LoseUI();
     }
 }

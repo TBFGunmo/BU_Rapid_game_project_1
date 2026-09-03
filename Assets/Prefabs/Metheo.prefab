@@ -170,3 +170,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 103b467ac09310644bf0888c045b63d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Meteor
+  explosionPrefab: {fileID: 110524, guid: 672620c6b6ae9cb4db7d1273e65bbc95, type: 3}
