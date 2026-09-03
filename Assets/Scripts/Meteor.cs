@@ -13,11 +13,7 @@ public class Meteor : MonoBehaviour
 
             if (explosionPrefab != null)
             {
-                // เสกเอฟเฟค
                 GameObject vfx = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-
-                // สั่งทำลายวัตถุเอฟเฟคทิ้งหลังผ่านไป 2 วินาที (เพื่อไม่ให้ขยะล้นฉาก)
-                // *หมายเหตุ: ปรับตัวเลข 2f ได้ตามความยาวเวลาของเอฟเฟคระเบิดที่คุณหามา
                 Destroy(vfx, 2f);
             }
 
