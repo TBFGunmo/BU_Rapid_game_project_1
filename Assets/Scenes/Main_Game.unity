@@ -17945,8 +17945,21 @@ MonoBehaviour:
   mainUI: {fileID: 224416016}
   Comic:
   - {fileID: 1824206864}
+  - {fileID: 645061015}
+  - {fileID: 142208091}
+  - {fileID: 179868200}
+  - {fileID: 2060675034}
+  - {fileID: 1378849090}
+  - {fileID: 1034415240}
+  - {fileID: 2043754841}
+  - {fileID: 810750181}
+  - {fileID: 256640355}
+  - {fileID: 1941364883}
+  - {fileID: 115991618}
+  - {fileID: 750943307}
   tutorial:
   - {fileID: 1179912372}
+  timeToSkip: 3
 --- !u!1 &256640355
 GameObject:
   m_ObjectHideFlags: 0
