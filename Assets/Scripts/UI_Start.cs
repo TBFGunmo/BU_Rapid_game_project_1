@@ -1,3 +1,4 @@
+using System.Data;
 using UnityEngine;
 
 public class UI_Start : MonoBehaviour
@@ -11,6 +12,9 @@ public class UI_Start : MonoBehaviour
 
     public GameObject[] tutorial;
     private bool endTutorial = false;
+
+    public float timeToSkip = 3f;
+    private float currentTime = 0f;
 
 
     void Start()
@@ -84,6 +88,38 @@ public class UI_Start : MonoBehaviour
 
                 print("end");
             }
+        }
+        
+        if (Input.GetKey(KeyCode.Space)) 
+        {
+            currentTime += Time.deltaTime;
+
+
+            if (currentTime >= timeToSkip && !endComic)
+            {
+                foreach (GameObject c in Comic)
+                {
+                    c.SetActive(false);
+                }
+
+                endComic = true;
+                currentA = 0;
+
+                foreach (GameObject c in tutorial)
+                {
+                    c.SetActive(false);
+                }
+
+                tutorial[currentA].SetActive(true);
+                currentA++;
+
+            }
+
+        }
+
+        if (Input.GetKeyUp(KeyCode.Space)) 
+        {
+            currentTime = 0;
         }
     }
 }
