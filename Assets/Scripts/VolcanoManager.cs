@@ -31,6 +31,10 @@ public class VolcanoManager : MonoBehaviour
 
     public static VolcanoManager instant;
 
+    private Coroutine loopSpawn;
+
+    private bool isLevel3 = false;
+
     private void Start()
     {
         instant = this;
@@ -38,12 +42,21 @@ public class VolcanoManager : MonoBehaviour
 
     public void StartSpawn() 
     {
-        StartCoroutine(SpawnRoutine());
+        loopSpawn = StartCoroutine(SpawnRoutine());
     }
 
     private void Update()
     {
         currentTime = GameManager.Instance.timeRemain;
+
+        if ((GameManager.Instance.isLevel3) && !isLevel3)
+        {
+            isLevel3 = true;
+            StopCoroutine(loopSpawn);
+
+            loopSpawn = StartCoroutine(SpawnRoutine());
+        }
+
     }
 
     private IEnumerator SpawnRoutine()
@@ -53,7 +66,13 @@ public class VolcanoManager : MonoBehaviour
             SpawnHazard();
 
             float timeRatio = currentTime / GameManager.Instance.timeGame;
+
             float currentSpawnDelay = Mathf.Lerp(fastSpawnRate, slowSpawnRate, timeRatio);
+ 
+            if (isLevel3)
+            {
+                currentSpawnDelay = Mathf.Lerp(fastSpawnRate/2, slowSpawnRate/2, timeRatio);
+            }
 
             yield return new WaitForSeconds(currentSpawnDelay);
         }

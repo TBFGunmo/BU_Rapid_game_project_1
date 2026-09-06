@@ -1,10 +1,8 @@
 using UnityEngine;
-using UnityEngine.Rendering;
 
-public class StartBox : MonoBehaviour
+public class Level2Box : MonoBehaviour
 {
     private bool isTrigger = false;
-    public GameObject CutEageUI;
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!isTrigger)
@@ -12,13 +10,10 @@ public class StartBox : MonoBehaviour
             //print("check_1");
             if (collision.gameObject.CompareTag("Player"))
             {
-                isTrigger = true;
                 //print("check_2");
-                CutEageUI.SetActive(false);
-                GameManager.Instance.StartGame();
-
-                //VolcanoManager.instant.StartSpawn(); move to level 2
-
+                isTrigger = true;
+                VolcanoManager.instant.StartSpawn();
+                print("start Level 2");
             }
         }
     }

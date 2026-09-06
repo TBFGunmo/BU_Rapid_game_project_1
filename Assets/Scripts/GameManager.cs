@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     public GameObject winPanel;
     public GameObject losePanel;
 
+    public bool isLevel3 = false;
+
     private void Awake()
     {
         if (Instance == null)
@@ -141,6 +143,15 @@ public class GameManager : MonoBehaviour
             if (player.catchRingObj != null) player.catchRingObj.SetActive(false);
             if (player.pushIconUI != null) player.pushIconUI.SetActive(false);
             if (player.missedIconUI != null) player.missedIconUI.SetActive(false);
+        }
+    }
+
+
+    public void StartLevel3() 
+    {
+        if (!isLevel3)
+        {
+            isLevel3 = true;
         }
     }
 

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Assemblies;
 
@@ -18,14 +19,18 @@ public class Geyser : MonoBehaviour
     [Header("Link GameOBJ")]
     public GameObject smoke;
     public GameObject blash;
+    public GameObject preBlash1;
+    public GameObject preBlash2;
 
+    private Coroutine blashCoroutine;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        currentTime = Random.Range(0, timeToBlash);
+        currentTime = UnityEngine.Random.Range(0, timeToBlash);
+        print(currentTime);
         timeToShowSmoke = timeToBlash - timeToPreBlash;
-        timeBlashing = timeToBlash + blashTime;
+        timeBlashing = blashTime / 3;
 
         smoke.SetActive(false);
         blash.SetActive(false);
@@ -46,20 +51,48 @@ public class Geyser : MonoBehaviour
         if (currentTime >= timeToBlash && !blashing)
         {
             blashing = true;
-            smoke.SetActive(false);
-            blash.SetActive(true);
-        }
+            
+            if (blashCoroutine != null) 
+            {
+                StopCoroutine(blashCoroutine);
+            }
 
-        if (currentTime > timeBlashing && blashing)
-        {
-            blashing = false;
-            showing = false;
-            smoke.SetActive(false);
-            blash.SetActive(false);
-            currentTime = 0f;
+            blashCoroutine = StartCoroutine(Blashing());
+
         }
 
     }
+
+
+    private IEnumerator Blashing() 
+    {
+        smoke.SetActive(false);
+        preBlash1.SetActive(true);
+
+        yield return new WaitForSeconds(0.15f);
+
+        preBlash1.SetActive(false);
+        preBlash2.SetActive(true);
+
+        yield return new WaitForSeconds(0.15f);
+
+        preBlash2.SetActive(false);
+        blash.SetActive(true);
+
+        yield return new WaitForSeconds(blashTime);
+
+        smoke.SetActive(false);
+        blash.SetActive(false);
+        preBlash2.SetActive(false);
+        preBlash2.SetActive(false);
+
+        blashing = false;
+        showing = false;
+
+        currentTime = 0f;
+
+    }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
