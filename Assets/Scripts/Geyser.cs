@@ -105,4 +105,15 @@ public class Geyser : MonoBehaviour
             }
         }
     }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            if (blashing)
+            {
+                GameManager.Instance.GameOver();
+            }
+        }
+    }
 }

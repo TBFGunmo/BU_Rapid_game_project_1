@@ -13,8 +13,10 @@ public class UI_Start : MonoBehaviour
     public GameObject[] tutorial;
     private bool endTutorial = false;
 
-    public float timeToSkip = 3f;
-    private float currentTime = 0f;
+    public GameObject cutSceneUI;
+
+    public float timeToSkip = 3f; // time to hold for skip set in inspector
+    private float currentTime = 0f; // current holding time , reset when release space before reach timeToSkip
 
 
     void Start()
@@ -24,6 +26,9 @@ public class UI_Start : MonoBehaviour
 
         Comic[currentA].SetActive(true);
         currentA++;
+
+        cutSceneUI.SetActive(false);
+
     }
 
     // Update is called once per frame
@@ -83,14 +88,20 @@ public class UI_Start : MonoBehaviour
             else 
             {
                 mainUI.gameObject.SetActive(true);
-                this.gameObject.SetActive(false);
                 GameManager.Instance.player.gameEnd = false;
 
-                print("end");
+                cutSceneUI.SetActive(true);
+
+                this.gameObject.SetActive(false);
+                
+
+
+
+                //print("end");
             }
         }
         
-        if (Input.GetKey(KeyCode.Space)) 
+        if (Input.GetKey(KeyCode.Space))    // <----------------- hold to skip
         {
             currentTime += Time.deltaTime;
 
@@ -117,7 +128,7 @@ public class UI_Start : MonoBehaviour
 
         }
 
-        if (Input.GetKeyUp(KeyCode.Space)) 
+        if (Input.GetKeyUp(KeyCode.Space))  // reset
         {
             currentTime = 0;
         }

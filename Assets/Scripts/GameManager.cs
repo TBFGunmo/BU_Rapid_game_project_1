@@ -116,10 +116,13 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        timeIsRun = false;
-        StopPlayer();
+        if (timeIsRun)
+        {
+            timeIsRun = false;
+            StopPlayer();
 
-        loseCut.PlayLoseCutscene();
+            loseCut.PlayLoseCutscene();
+        }
     }
 
     void StopPlayer()
