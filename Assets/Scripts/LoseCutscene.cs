@@ -30,10 +30,15 @@ public class LoseCutscene : MonoBehaviour
 
     [Header("Explosion & Fire Effects")]
     public GameObject[] fireVfxPrefabs; 
-    public Transform[] fireSpawnPoints; 
-    public AudioClip villageExplosionSound;
+    public Transform[] fireSpawnPoints;
     public float explosionShakeIntensity = 0.8f;
     public float explosionShakeDuration = 0.5f;
+
+    public AudioClip volcanoZoomSound;
+    public float zoomExplosionDelay = 0.3f;
+    public AudioClip villageExplosionSound;
+    public AudioClip volcanoShakeSound;
+    [Range(0f, 1f)] public float shakeVolume = 0.5f;
 
     public void PlayLoseCutscene()
     {
@@ -69,6 +74,31 @@ public class LoseCutscene : MonoBehaviour
         }
         endCamera.orthographicSize = zoomInSize;
 
+        if (volcanoShakeSound != null)
+        {
+            GameObject rumbleSoundObj = new GameObject("VolcanoRumbleAudio");
+            AudioSource rumbleSource = rumbleSoundObj.AddComponent<AudioSource>();
+            rumbleSource.clip = volcanoShakeSound;
+            rumbleSource.spatialBlend = 0f;
+            rumbleSource.volume = shakeVolume; 
+            rumbleSource.Play();
+
+            Destroy(rumbleSoundObj, volcanoShakeSound.length + 1f);
+        }
+
+        if (volcanoZoomSound != null)
+        {
+            GameObject zoomSoundObj = new GameObject("VolcanoZoomAudio");
+            AudioSource source = zoomSoundObj.AddComponent<AudioSource>();
+            source.clip = volcanoZoomSound;
+            source.spatialBlend = 0f;
+            source.volume = 1f;
+
+            source.PlayDelayed(zoomExplosionDelay);
+
+            Destroy(zoomSoundObj, volcanoZoomSound.length + zoomExplosionDelay + 1f);
+        }
+
         float shakeTimer = 0f;
         while (shakeTimer < delayAtVolcano)
         {
@@ -79,6 +109,7 @@ public class LoseCutscene : MonoBehaviour
         }
         endCamera.transform.position = volcanoPos;
 
+     
         GameObject meteor = null;
         meteor = Instantiate(RedRockPrefab, volcanoPoint.position, Quaternion.identity);
        
@@ -129,7 +160,14 @@ public class LoseCutscene : MonoBehaviour
 
             if (villageExplosionSound != null)
             {
-                AudioSource.PlayClipAtPoint(villageExplosionSound, villagePoint.position);
+                GameObject soundObj = new GameObject("VillageExplosionAudio");
+                AudioSource source = soundObj.AddComponent<AudioSource>();
+                source.clip = villageExplosionSound;
+                source.spatialBlend = 0f; 
+                source.volume = 1f;
+                source.Play();
+
+                Destroy(soundObj, villageExplosionSound.length + 1f);
             }
 
             if (fireSpawnPoints != null && fireVfxPrefabs != null && fireVfxPrefabs.Length > 0)
