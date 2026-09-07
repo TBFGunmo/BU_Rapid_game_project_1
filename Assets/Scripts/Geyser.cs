@@ -24,6 +24,13 @@ public class Geyser : MonoBehaviour
 
     private Coroutine blashCoroutine;
 
+    private bool isStopped = false;
+
+    [Header("Geyser Audio")]
+    public AudioClip smokeSound; 
+    public AudioClip eruptSound; 
+    private AudioSource audioSource; 
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -35,17 +42,59 @@ public class Geyser : MonoBehaviour
         smoke.SetActive(false);
         blash.SetActive(false);
 
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null) 
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 1f; 
+        audioSource.rolloffMode = AudioRolloffMode.Linear;
+        audioSource.minDistance = 10f;
+        audioSource.maxDistance = 25f;
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.Instance != null && GameManager.Instance.player != null && GameManager.Instance.player.gameEnd)
+        {
+            if (!isStopped)
+            {
+                isStopped = true;
+
+                if (blashCoroutine != null)
+                {
+                    StopCoroutine(blashCoroutine);
+                }
+
+                if (audioSource != null)
+                {
+                    audioSource.Stop();
+                }
+
+                if (smoke != null) smoke.SetActive(false);
+                if (blash != null) blash.SetActive(false);
+                if (preBlash1 != null) preBlash1.SetActive(false);
+                if (preBlash2 != null) preBlash2.SetActive(false);
+            }
+            return; 
+        }
+
         currentTime += Time.deltaTime;
 
         if (currentTime >= timeToShowSmoke && !showing) 
         {
             showing = true;
             smoke.SetActive(true);
+
+            if (smokeSound != null)
+            {
+                audioSource.clip = smokeSound;
+                audioSource.loop = true;
+                audioSource.Play();
+            }
         }
 
         if (currentTime >= timeToBlash && !blashing)
@@ -66,6 +115,14 @@ public class Geyser : MonoBehaviour
 
     private IEnumerator Blashing() 
     {
+        if (eruptSound != null)
+        {
+            audioSource.Stop();
+            audioSource.clip = eruptSound;
+            audioSource.loop = false;
+            audioSource.Play();
+        }
+
         smoke.SetActive(false);
         preBlash1.SetActive(true);
 
@@ -84,7 +141,12 @@ public class Geyser : MonoBehaviour
         smoke.SetActive(false);
         blash.SetActive(false);
         preBlash2.SetActive(false);
-        preBlash2.SetActive(false);
+        preBlash1.SetActive(false);
+
+        if (audioSource != null)
+        {
+            audioSource.Stop();
+        }
 
         blashing = false;
         showing = false;

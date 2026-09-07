@@ -218,18 +218,16 @@ public class VolcanoManager : MonoBehaviour
                 c.a = Mathf.Lerp(0f, 0.3f, t);
                 lineShadowSr.color = c;
 
-                float extraTop = 40f;   // ระยะทะลุฟ้าตอนเริ่มเตือน
-                float extraDepth = 20f; // ระยะทะลุดิน
+                float extraTop = 40f;  
+                float extraDepth = 20f; 
 
-                float startLength = extraTop + fallHeight + extraDepth; // ความยาวตอนเริ่ม (ยาวมาก)
-                float endLength = fallHeight + extraDepth; // ความยาวตอนจบ (หดลงมาเท่าจุดเสกหิน)
+                float startLength = extraTop + fallHeight + extraDepth; 
+                float endLength = fallHeight + extraDepth; 
 
-                // คำนวณความยาวปัจจุบันแบบค่อยๆ หดลงตามเวลาเตือน
                 float currentLength = Mathf.Lerp(startLength, endLength, t);
                 float bottomY = groundPoint.y - extraDepth;
                 float centerY = bottomY + (currentLength / 2f);
 
-                // สั่งย่อ Scale และเลื่อนตำแหน่ง
                 lineShadowSr.transform.localScale = new Vector3(1f, currentLength, 1f);
                 lineShadowSr.transform.position = new Vector3(lineShadowSr.transform.position.x, centerY, 0f);
             }
@@ -262,7 +260,8 @@ public class VolcanoManager : MonoBehaviour
             if (lineShadowSr != null)
             {
                 Color c = lineShadowSr.color;
-                c.a = Mathf.Lerp(0.3f, 0f, fallRatio);
+
+                c.a = Mathf.Lerp(0.3f, 0.9f, fallRatio);
                 lineShadowSr.color = c;
 
                 float extraDepth = 20f;
