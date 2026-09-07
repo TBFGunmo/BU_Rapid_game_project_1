@@ -140,7 +140,6 @@ public class LoseCutscene : MonoBehaviour
                     yield return null;
                 }
 
-                // อัปเดตตำแหน่งปัจจุบันให้เป็นจุดบนฟ้าที่เพิ่งวิ่งมาถึง เพื่อเตรียมวิ่งไปจุดต่อไป
                 currentCamPos = targetSkyPos;
                 currentMeteorPos = targetMeteorPos;
             }

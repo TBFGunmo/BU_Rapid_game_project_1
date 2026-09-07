@@ -18996,10 +18996,11 @@ MonoBehaviour:
   player: {fileID: 818787331}
   rockPrefab: {fileID: 2957146818722650730, guid: 2ce0f160355b20f4a92243b68a7addf3, type: 3}
   shadowPrefab: {fileID: 5315187973601505980, guid: befcc295842fac344a4f211466256552, type: 3}
+  shadowLinePrefab: {fileID: 7221901299684381405, guid: 34cde7333c3f9eb44bebe95fb42a649b, type: 3}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  spawnRadius: 6
+  spawnRadius: 4
   fallHeight: 13
   warningTime: 1.5
   maxTime: 0
@@ -47688,7 +47689,7 @@ MonoBehaviour:
   player: {fileID: 818787332}
   rockCut: {fileID: 765773644}
   loseCut: {fileID: 824162271}
-  timeGame: 1
+  timeGame: 110
   timeRemain: 0
   timeText: {fileID: 1901963835}
   winPanel: {fileID: 1689493740}

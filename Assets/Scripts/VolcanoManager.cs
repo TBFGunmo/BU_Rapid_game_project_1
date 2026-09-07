@@ -6,8 +6,9 @@ public class VolcanoManager : MonoBehaviour
     [Header("References")]
     public Transform player;
     public GameObject rockPrefab;     
-    public GameObject shadowPrefab;  
-    public LayerMask groundLayer;     
+    public GameObject shadowPrefab;
+    public GameObject shadowLinePrefab;
+    public LayerMask groundLayer; 
 
     [Header("Spawn Settings")]
     public float spawnRadius = 6f;    
@@ -156,6 +157,10 @@ public class VolcanoManager : MonoBehaviour
 
         GameObject shadow = null;
         SpriteRenderer shadowSr = null;
+
+        GameObject lineShodow = null;
+        SpriteRenderer lineShadowSr = null;
+
         if (shadowPrefab != null)
         {
             Quaternion shadowRotation = Quaternion.FromToRotation(Vector3.up, hitNormal);
@@ -171,10 +176,30 @@ public class VolcanoManager : MonoBehaviour
             }
         }
 
+        if (shadowLinePrefab != null)
+        {
+            float extraDepth = 20f;
+
+            Vector2 beamPos = new Vector2(groundPoint.x, groundPoint.y + (fallHeight / 2f));
+            lineShodow = Instantiate(shadowLinePrefab, beamPos, Quaternion.identity);
+
+            lineShodow.transform.localScale = new Vector3(1f, fallHeight + extraDepth, 1f);
+            lineShadowSr = lineShodow.GetComponent<SpriteRenderer>();
+
+            if (lineShadowSr != null)
+            {
+                Color c = lineShadowSr.color;
+                c.a = 0f;
+                lineShadowSr.color = c;
+            }
+        }
+
         timer = 0f;
         while (timer < warningTime)
         {
             timer += Time.deltaTime;
+            float t = timer / warningTime;
+
             if (audioSource != null)
             {
                 audioSource.volume = Mathf.Lerp(maxMeteorVolume / 2f, maxMeteorVolume, timer / warningTime);
@@ -183,15 +208,39 @@ public class VolcanoManager : MonoBehaviour
             if (shadowSr != null)
             {
                 Color c = shadowSr.color;
-                c.a = Mathf.Lerp(0f, 0.9f, timer / warningTime);
+                c.a = Mathf.Lerp(0f, 0.7f, timer / warningTime);
                 shadowSr.color = c;
             }
+
+            if (lineShadowSr != null)
+            {
+                Color c = lineShadowSr.color;
+                c.a = Mathf.Lerp(0f, 0.3f, t);
+                lineShadowSr.color = c;
+
+                float extraTop = 40f;   // ระยะทะลุฟ้าตอนเริ่มเตือน
+                float extraDepth = 20f; // ระยะทะลุดิน
+
+                float startLength = extraTop + fallHeight + extraDepth; // ความยาวตอนเริ่ม (ยาวมาก)
+                float endLength = fallHeight + extraDepth; // ความยาวตอนจบ (หดลงมาเท่าจุดเสกหิน)
+
+                // คำนวณความยาวปัจจุบันแบบค่อยๆ หดลงตามเวลาเตือน
+                float currentLength = Mathf.Lerp(startLength, endLength, t);
+                float bottomY = groundPoint.y - extraDepth;
+                float centerY = bottomY + (currentLength / 2f);
+
+                // สั่งย่อ Scale และเลื่อนตำแหน่ง
+                lineShadowSr.transform.localScale = new Vector3(1f, currentLength, 1f);
+                lineShadowSr.transform.position = new Vector3(lineShadowSr.transform.position.x, centerY, 0f);
+            }
+
             yield return null;
         }
 
         if (GameManager.Instance.player.gameEnd)
         {
             if (shadow != null) Destroy(shadow);
+            if (lineShodow != null) Destroy(lineShodow);
             yield break; 
         }
 
@@ -200,22 +249,39 @@ public class VolcanoManager : MonoBehaviour
 
         while (rock != null)
         {
+            float currentDist = rock.transform.position.y - groundPoint.y;
+            float fallRatio = Mathf.Clamp01(1f - (currentDist / fallHeight));
+
             if (shadowSr != null)
             {
-                float currentDist = rock.transform.position.y - groundPoint.y;
-                float fallRatio = Mathf.Clamp01(1f - (currentDist / fallHeight));
-
                 Color c = shadowSr.color;
-                c.a = Mathf.Lerp(0.9f, 1f, fallRatio);
+                c.a = Mathf.Lerp(0.7f, 1f, fallRatio);
                 shadowSr.color = c;
+            }
+
+            if (lineShadowSr != null)
+            {
+                Color c = lineShadowSr.color;
+                c.a = Mathf.Lerp(0.3f, 0f, fallRatio);
+                lineShadowSr.color = c;
+
+                float extraDepth = 20f;
+                float bottomY = groundPoint.y - extraDepth;
+                float currentLength = rock.transform.position.y - bottomY;
+
+                if (currentLength > 0.1f)
+                {
+                    lineShadowSr.transform.localScale = new Vector3(1f, currentLength, 1f);
+
+                    float centerY = bottomY + (currentLength / 2f);
+                    lineShadowSr.transform.position = new Vector3(lineShadowSr.transform.position.x, centerY, lineShadowSr.transform.position.z);
+                }
             }
 
             yield return null;
         }
 
-        if (shadow != null)
-        {
-            Destroy(shadow);
-        }
+        if (shadow != null) Destroy(shadow);
+        if (lineShodow != null) Destroy(lineShodow);
     }
 }
