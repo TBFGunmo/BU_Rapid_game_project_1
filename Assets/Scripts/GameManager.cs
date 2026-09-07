@@ -1,6 +1,6 @@
 using UnityEngine;
 using TMPro;
-
+using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
             else 
             {
                 timeRemain = 0;
-                timeIsRun   = false;
+                
                 UpdateTimerUI();
                 GameOver();
             }

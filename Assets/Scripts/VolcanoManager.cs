@@ -52,7 +52,10 @@ public class VolcanoManager : MonoBehaviour
         if ((GameManager.Instance.isLevel3) && !isLevel3)
         {
             isLevel3 = true;
-            StopCoroutine(loopSpawn);
+            if (loopSpawn != null)
+            {
+                StopCoroutine(loopSpawn);
+            }
 
             loopSpawn = StartCoroutine(SpawnRoutine());
         }
