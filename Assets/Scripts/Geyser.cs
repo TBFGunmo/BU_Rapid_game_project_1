@@ -99,7 +99,7 @@ public class Geyser : MonoBehaviour
         print("cjsd");
         if (collision.gameObject.CompareTag("Player")) 
         {
-            if (blashing) 
+            if (blashing && !GameManager.Instance.player.gameEnd) 
             {
                 GameManager.Instance.GameOver();
             }
@@ -110,7 +110,7 @@ public class Geyser : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            if (blashing)
+            if (blashing && !GameManager.Instance.player.gameEnd)
             {
                 GameManager.Instance.GameOver();
             }

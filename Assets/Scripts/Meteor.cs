@@ -19,7 +19,11 @@ public class Meteor : MonoBehaviour
 
             if (collision.gameObject.CompareTag("Player"))
             {
-                GameManager.Instance.GameOver();
+                if (!GameManager.Instance.player.gameEnd)
+                {
+                    GameManager.Instance.GameOver();
+                }
+
                 Destroy(this.gameObject);
             }
             else 

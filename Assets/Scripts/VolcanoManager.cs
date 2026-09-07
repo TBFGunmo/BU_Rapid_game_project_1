@@ -180,10 +180,16 @@ public class VolcanoManager : MonoBehaviour
             if (shadowSr != null)
             {
                 Color c = shadowSr.color;
-                c.a = Mathf.Lerp(0f, 0.7f, timer / warningTime);
+                c.a = Mathf.Lerp(0f, 0.9f, timer / warningTime);
                 shadowSr.color = c;
             }
             yield return null;
+        }
+
+        if (GameManager.Instance.player.gameEnd)
+        {
+            if (shadow != null) Destroy(shadow);
+            yield break; 
         }
 
         Vector2 spawnPos = new Vector2(groundPoint.x, groundPoint.y + fallHeight);
@@ -197,7 +203,7 @@ public class VolcanoManager : MonoBehaviour
                 float fallRatio = Mathf.Clamp01(1f - (currentDist / fallHeight));
 
                 Color c = shadowSr.color;
-                c.a = Mathf.Lerp(0.7f, 1f, fallRatio);
+                c.a = Mathf.Lerp(0.9f, 1f, fallRatio);
                 shadowSr.color = c;
             }
 

@@ -1,5 +1,6 @@
 using System.Data;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI_Start : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class UI_Start : MonoBehaviour
     public float timeToSkip = 3f; // time to hold for skip set in inspector
     private float currentTime = 0f; // current holding time , reset when release space before reach timeToSkip
 
+    public Image skipProgressBar;
 
     void Start()
     {
@@ -28,6 +30,11 @@ public class UI_Start : MonoBehaviour
         currentA++;
 
         cutSceneUI.SetActive(false);
+
+        if (skipProgressBar != null)
+        {
+            skipProgressBar.fillAmount = 0f;
+        }
 
     }
 
@@ -105,6 +112,10 @@ public class UI_Start : MonoBehaviour
         {
             currentTime += Time.deltaTime;
 
+            if (skipProgressBar != null)
+            {
+                skipProgressBar.fillAmount = currentTime / timeToSkip;
+            }
 
             if (currentTime >= timeToSkip && !endComic)
             {
@@ -124,6 +135,12 @@ public class UI_Start : MonoBehaviour
                 tutorial[currentA].SetActive(true);
                 currentA++;
 
+                currentTime = 0f;
+                if (skipProgressBar != null)
+                {
+                    skipProgressBar.fillAmount = 0f;
+                }
+
             }
 
         }
@@ -131,6 +148,10 @@ public class UI_Start : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Space))  // reset
         {
             currentTime = 0;
+            if (skipProgressBar != null)
+            {
+                skipProgressBar.fillAmount = 0f;
+            }
         }
     }
 }
