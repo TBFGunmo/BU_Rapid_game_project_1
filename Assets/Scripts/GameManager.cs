@@ -55,6 +55,18 @@ public class GameManager : MonoBehaviour
                 GameOver();
             }
         }
+        else
+        {
+            bool isShowingEndUI = (winPanel != null && winPanel.activeSelf) || (losePanel != null && losePanel.activeSelf);
+
+            if (isShowingEndUI)
+            {
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    LoadPreGame();
+                }
+            }
+        }
     }
 
     public void StartGame()
@@ -156,6 +168,13 @@ public class GameManager : MonoBehaviour
         {
             isLevel3 = true;
         }
+    }
+
+    public void LoadPreGame()
+    {
+        Time.timeScale = 1f;
+        Destroy(gameObject);
+        SceneManager.LoadScene("pre_game");
     }
 
 }   

@@ -9,7 +9,7 @@ public class LoseCutscene : MonoBehaviour
 
     [Header("Cutscene Targets")]
     public Transform volcanoPoint;
-    public Transform skyPoint; 
+    public Transform[] skyPoints; 
     public Transform villagePoint;
 
     [Header("Pan Settings")]
@@ -112,26 +112,40 @@ public class LoseCutscene : MonoBehaviour
      
         GameObject meteor = null;
         meteor = Instantiate(RedRockPrefab, volcanoPoint.position, Quaternion.identity);
-       
 
-        timer = 0f;
-        Vector3 skyPos = new Vector3(skyPoint.position.x, skyPoint.position.y, startPos.z);
-        while (timer < timeToSky)
+        Vector3 currentCamPos = volcanoPos;
+        Vector3 currentMeteorPos = volcanoPoint.position;
+
+        if (skyPoints != null && skyPoints.Length > 0)
         {
-            timer += Time.deltaTime;
-            float t = timer / timeToSky;
-
-            endCamera.transform.position = Vector3.Lerp(volcanoPos, skyPos, t);
-
-            if (meteor != null)
+            for (int i = 0; i < skyPoints.Length; i++)
             {
-                meteor.transform.position = Vector3.Lerp(volcanoPoint.position, skyPoint.position, t);
-                meteor.transform.Rotate(0f, 0f, -rockRotationSpeed * Time.deltaTime);
-            }
+                timer = 0f;
+                Vector3 targetSkyPos = new Vector3(skyPoints[i].position.x, skyPoints[i].position.y, startPos.z);
+                Vector3 targetMeteorPos = skyPoints[i].position;
 
-            yield return null;
+                while (timer < timeToSky)
+                {
+                    timer += Time.deltaTime;
+                    float t = timer / timeToSky;
+
+                    endCamera.transform.position = Vector3.Lerp(currentCamPos, targetSkyPos, t);
+
+                    if (meteor != null)
+                    {
+                        meteor.transform.position = Vector3.Lerp(currentMeteorPos, targetMeteorPos, t);
+                        meteor.transform.Rotate(0f, 0f, -rockRotationSpeed * Time.deltaTime);
+                    }
+
+                    yield return null;
+                }
+
+                // อัปเดตตำแหน่งปัจจุบันให้เป็นจุดบนฟ้าที่เพิ่งวิ่งมาถึง เพื่อเตรียมวิ่งไปจุดต่อไป
+                currentCamPos = targetSkyPos;
+                currentMeteorPos = targetMeteorPos;
+            }
         }
-        endCamera.transform.position = skyPos;
+
 
         timer = 0f;
         Vector3 villagePos = new Vector3(villagePoint.position.x, villagePoint.position.y, startPos.z);
@@ -140,12 +154,12 @@ public class LoseCutscene : MonoBehaviour
             timer += Time.deltaTime;
             float t = timer / timeToVillage;
 
-            endCamera.transform.position = Vector3.Lerp(skyPos, villagePos, t);
+            endCamera.transform.position = Vector3.Lerp(currentCamPos, villagePos, t);
             endCamera.orthographicSize = Mathf.Lerp(zoomInSize, originalSize, t);
 
             if (meteor != null)
             {
-                meteor.transform.position = Vector3.Lerp(skyPoint.position, villagePoint.position, t);
+                meteor.transform.position = Vector3.Lerp(currentMeteorPos, villagePoint.position, t);
                 meteor.transform.Rotate(0f, 0f, -rockRotationSpeed * Time.deltaTime);
             }
 
