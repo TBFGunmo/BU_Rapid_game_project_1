@@ -23692,7 +23692,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Rock
   rockSound: {fileID: 8300000, guid: 56ea40acfbad25e4393d23e76b633abf, type: 3}
-  rockVolume: 0.1
+  rockVolume: 0
 --- !u!58 &765773640
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -50266,7 +50266,7 @@ MonoBehaviour:
   player: {fileID: 818787332}
   rockCut: {fileID: 765773644}
   loseCut: {fileID: 824162271}
-  timeGame: 220
+  timeGame: 110
   timeRemain: 0
   timeText: {fileID: 1901963835}
   winPanel: {fileID: 1689493740}
