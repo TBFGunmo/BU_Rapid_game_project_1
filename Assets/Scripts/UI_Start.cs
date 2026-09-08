@@ -64,12 +64,19 @@ public class UI_Start : MonoBehaviour
                 }
                 else
                 {
+                    
+
                     endComic = true;
                     currentA = 0;
                 }
             }
             else if (!endTutorial)
             {
+                foreach (GameObject c in Comic)
+                {
+                    c.SetActive(false);
+                }
+
                 if ((currentA + 1) <= tutorial.Length)
                 {
                     foreach (GameObject c in tutorial)
@@ -140,7 +147,33 @@ public class UI_Start : MonoBehaviour
                 {
                     skipProgressBar.fillAmount = 0f;
                 }
+            }
+            else if (currentTime >= timeToSkip && !endTutorial) 
+            {
+                foreach (GameObject c in tutorial)
+                {
+                    c.SetActive(false);
+                }
 
+                foreach (GameObject c in Comic)
+                {
+                    c.SetActive(false);
+                }
+
+                endTutorial = true;
+                currentA = 0;
+
+                if (skipProgressBar != null)
+                {
+                    skipProgressBar.fillAmount = 0f;
+                }
+
+                mainUI.gameObject.SetActive(true);
+                GameManager.Instance.player.gameEnd = false;
+
+                cutSceneUI.SetActive(true);
+
+                this.gameObject.SetActive(false);
             }
 
         }

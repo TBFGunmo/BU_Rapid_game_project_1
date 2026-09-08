@@ -197,6 +197,7 @@ MonoBehaviour:
   preBlash2: {fileID: 9192862965192088390}
   smokeSound: {fileID: 8300000, guid: 634256118b4119c4bbfd1afd6cd46230, type: 3}
   eruptSound: {fileID: 8300000, guid: 89408293ee2817c48aa0d86b3119b95d, type: 3}
+  geyserVolume: 0.1
 --- !u!1 &2906238755274060249
 GameObject:
   m_ObjectHideFlags: 0

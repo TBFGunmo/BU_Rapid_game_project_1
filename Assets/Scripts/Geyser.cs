@@ -61,6 +61,8 @@ public class Geyser : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        currentTime += Time.deltaTime;
+
         if (GameManager.Instance != null && GameManager.Instance.player != null && GameManager.Instance.player.gameEnd)
         {
             //print("check2");
@@ -85,35 +87,35 @@ public class Geyser : MonoBehaviour
                 if (preBlash1 != null) preBlash1.SetActive(false);
                 if (preBlash2 != null) preBlash2.SetActive(false);
             }
-            return; 
+            return;
         }
-
-        currentTime += Time.deltaTime;
-
-        if (currentTime >= timeToShowSmoke && !showing) 
+        else
         {
-            showing = true;
-            smoke.SetActive(true);
-
-            if (smokeSound != null)
+            if (currentTime >= timeToShowSmoke && !showing)
             {
-                audioSource.clip = smokeSound;
-                audioSource.loop = true;
-                audioSource.Play();
-            }
-        }
+                showing = true;
+                smoke.SetActive(true);
 
-        if (currentTime >= timeToBlash && !blashing)
-        {
-            blashing = true;
-            
-            if (blashCoroutine != null) 
-            {
-                StopCoroutine(blashCoroutine);
+                if (smokeSound != null)
+                {
+                    audioSource.clip = smokeSound;
+                    audioSource.loop = true;
+                    audioSource.Play();
+                }
             }
 
-            blashCoroutine = StartCoroutine(Blashing());
+            if (currentTime >= timeToBlash && !blashing)
+            {
+                blashing = true;
 
+                if (blashCoroutine != null)
+                {
+                    StopCoroutine(blashCoroutine);
+                }
+
+                blashCoroutine = StartCoroutine(Blashing());
+
+            }
         }
 
     }
