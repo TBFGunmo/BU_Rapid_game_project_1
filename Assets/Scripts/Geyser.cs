@@ -29,7 +29,8 @@ public class Geyser : MonoBehaviour
     [Header("Geyser Audio")]
     public AudioClip smokeSound; 
     public AudioClip eruptSound; 
-    private AudioSource audioSource; 
+    private AudioSource audioSource;
+    [Range(0f, 1f)] public float geyserVolume = 0.3f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -47,6 +48,8 @@ public class Geyser : MonoBehaviour
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
+        audioSource.volume = geyserVolume;
+
         audioSource.playOnAwake = false;
         audioSource.spatialBlend = 1f; 
         audioSource.rolloffMode = AudioRolloffMode.Linear;

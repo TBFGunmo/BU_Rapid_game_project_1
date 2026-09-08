@@ -27,6 +27,7 @@ public class VolcanoManager : MonoBehaviour
 
     [Header("Audio")]
     public AudioClip earthquakeSound;
+    [Range(0f, 1f)] public float earthquakeVolume = 0.5f;
     public AudioClip meteorSound;
     [Range(0f, 1f)] public float maxMeteorVolume = 0.5f;
 
@@ -104,7 +105,7 @@ public class VolcanoManager : MonoBehaviour
             eqObj.transform.position = groundPoint;
             AudioSource eqSource = eqObj.AddComponent<AudioSource>();
             eqSource.clip = earthquakeSound;
-            eqSource.volume = 0.7f;
+            eqSource.volume = earthquakeVolume;
             eqSource.Play();
             Destroy(eqObj, shakeDuration);
         }

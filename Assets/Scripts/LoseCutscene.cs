@@ -36,7 +36,11 @@ public class LoseCutscene : MonoBehaviour
 
     public AudioClip volcanoZoomSound;
     public float zoomExplosionDelay = 0.3f;
+    [Range(0f, 1f)] public float volcanoZoomVolume = 0.8f; 
+
     public AudioClip villageExplosionSound;
+    [Range(0f, 1f)] public float villageExplosionVolume = 1.0f; 
+
     public AudioClip volcanoShakeSound;
     [Range(0f, 1f)] public float shakeVolume = 0.5f;
 
@@ -92,7 +96,7 @@ public class LoseCutscene : MonoBehaviour
             AudioSource source = zoomSoundObj.AddComponent<AudioSource>();
             source.clip = volcanoZoomSound;
             source.spatialBlend = 0f;
-            source.volume = 1f;
+            source.volume = volcanoZoomVolume;
 
             source.PlayDelayed(zoomExplosionDelay);
 
@@ -176,8 +180,8 @@ public class LoseCutscene : MonoBehaviour
                 GameObject soundObj = new GameObject("VillageExplosionAudio");
                 AudioSource source = soundObj.AddComponent<AudioSource>();
                 source.clip = villageExplosionSound;
-                source.spatialBlend = 0f; 
-                source.volume = 1f;
+                source.spatialBlend = 0f;
+                source.volume = villageExplosionVolume;
                 source.Play();
 
                 Destroy(soundObj, villageExplosionSound.length + 1f);
