@@ -24459,7 +24459,9 @@ MonoBehaviour:
   holdDistanceDuringKnockback: 1
   gameEnd: 1
   hitSound: {fileID: 8300000, guid: e14f14ab054f52a4288a50864d828767, type: 3}
-  hitVolume: 0.5
+  hitVolume: 0.25
+  catchSound: {fileID: 8300000, guid: fa208cea44d71224da92e9a203683e1c, type: 3}
+  catchVolume: 0.25
 --- !u!50 &818787334
 Rigidbody2D:
   serializedVersion: 5
@@ -50266,7 +50268,7 @@ MonoBehaviour:
   player: {fileID: 818787332}
   rockCut: {fileID: 765773644}
   loseCut: {fileID: 824162271}
-  timeGame: 110
+  timeGame: 90
   timeRemain: 0
   timeText: {fileID: 1901963835}
   winPanel: {fileID: 1689493740}
