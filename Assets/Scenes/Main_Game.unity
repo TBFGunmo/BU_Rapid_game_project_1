@@ -23691,6 +23691,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ec1bf821acb62243adb1cce72e80bf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Rock
+  rockSound: {fileID: 8300000, guid: 56ea40acfbad25e4393d23e76b633abf, type: 3}
+  rockVolume: 0.1
 --- !u!58 &765773640
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -24456,6 +24458,8 @@ MonoBehaviour:
   maxKnockBackForce: 50
   holdDistanceDuringKnockback: 1
   gameEnd: 1
+  hitSound: {fileID: 8300000, guid: e14f14ab054f52a4288a50864d828767, type: 3}
+  hitVolume: 0.5
 --- !u!50 &818787334
 Rigidbody2D:
   serializedVersion: 5

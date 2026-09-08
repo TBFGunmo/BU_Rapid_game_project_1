@@ -83,6 +83,9 @@ public class Player : MonoBehaviour
 
     private Coroutine missedRoutine;
 
+    public AudioClip hitSound;
+    [Range(0f, 1f)] public float hitVolume = 1.0f;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -291,6 +294,7 @@ public class Player : MonoBehaviour
     public void StartGame() 
     {
         isStart = true;
+        gameEnd = false;
         autoWalkDir = saveWalkDir;
 
         currentSpeed = RunSpeed;
@@ -317,6 +321,17 @@ public class Player : MonoBehaviour
                         calculatedForce = Mathf.Clamp(calculatedForce, minKnockBackForce, maxKnockBackForce);
 
                         KnockBack(calculatedForce);
+
+                        if (hitSound != null)
+                        {
+                            GameObject hitAudioObj = new GameObject("HitAudio");
+                            AudioSource source = hitAudioObj.AddComponent<AudioSource>();
+                            source.clip = hitSound;
+                            source.volume = hitVolume;
+                            source.spatialBlend = 0f;
+                            source.Play();
+                            Destroy(hitAudioObj, hitSound.length + 0.5f);
+                        }
 
                         StartCoroutine(ShowMissedUI());
 

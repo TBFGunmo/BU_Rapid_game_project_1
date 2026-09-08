@@ -6,6 +6,11 @@ public class Rock : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 oriVelocity;
 
+    [Header("Rock Audio")]
+    public AudioClip rockSound;
+    [Range(0f, 1f)] public float rockVolume = 0.5f;
+    private AudioSource audioSource;
+
     //public Player Player;
 
     private Coroutine slowCoroutine;
@@ -13,6 +18,51 @@ public class Rock : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+        if (rockSound != null)
+        {
+            audioSource.clip = rockSound;
+            audioSource.volume = rockVolume;
+            audioSource.loop = true;
+            audioSource.spatialBlend = 0f; 
+            audioSource.Play();
+        }
+
+    }
+
+    void Update()
+    {
+        if (GameManager.Instance != null && GameManager.Instance.player != null)
+        {
+            if (GameManager.Instance.player.gameEnd)
+            {
+                if (audioSource != null && audioSource.isPlaying)
+                {
+                    audioSource.Stop();
+                }
+            }
+            else
+            {
+                if (audioSource != null && !audioSource.isPlaying)
+                {
+                    audioSource.Play();
+                }
+            }
+        }
+    }
+
+    private void OnValidate()
+    {
+        if (audioSource != null)
+        {
+            audioSource.volume = rockVolume;
+        }
     }
 
     public void PushRockUp(Vector2 direction, float force)
