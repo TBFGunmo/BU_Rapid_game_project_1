@@ -60,8 +60,10 @@ public class Geyser : MonoBehaviour
     {
         if (GameManager.Instance != null && GameManager.Instance.player != null && GameManager.Instance.player.gameEnd)
         {
+            //print("check2");
             if (!isStopped)
             {
+                //print("check1");
                 isStopped = true;
 
                 if (blashCoroutine != null)
@@ -71,6 +73,7 @@ public class Geyser : MonoBehaviour
 
                 if (audioSource != null)
                 {
+                    print("check");
                     audioSource.Stop();
                 }
 

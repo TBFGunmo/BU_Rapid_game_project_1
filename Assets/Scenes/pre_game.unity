@@ -375,7 +375,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.2
+  m_Volume: 0.05
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -474,8 +474,8 @@ MonoBehaviour:
   bgmSource: {fileID: 314386764}
   normalBGM: {fileID: 8300000, guid: 1d3d6255348bb914cbec76c45936d843, type: 3}
   phase3BGM: {fileID: 8300000, guid: e207fa95c14a3464dae483d21fd9e7f5, type: 3}
-  masterVolume: 0.2
-  fadeVolume: 0.1
+  masterVolume: 0.05
+  fadeVolume: 0.025
   fadeTime: 1.5
 --- !u!4 &314386766
 Transform:

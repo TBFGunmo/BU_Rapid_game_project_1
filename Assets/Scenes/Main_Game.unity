@@ -18887,7 +18887,7 @@ MonoBehaviour:
   tutorial:
   - {fileID: 1179912372}
   cutSceneUI: {fileID: 1597567503}
-  timeToSkip: 3
+  timeToSkip: 1.5
   skipProgressBar: {fileID: 1126714249}
 --- !u!1 &256640355
 GameObject:
@@ -19011,7 +19011,7 @@ MonoBehaviour:
   shakeIntensity: 0.15
   earthquakeSound: {fileID: 8300000, guid: a019c9d38cac59e4787cd51032bd3f7e, type: 3}
   meteorSound: {fileID: 8300000, guid: a73d7dacbd5e9a54a97c33621588b48d, type: 3}
-  maxMeteorVolume: 1
+  maxMeteorVolume: 0.5
 --- !u!4 &273187678
 Transform:
   m_ObjectHideFlags: 0
