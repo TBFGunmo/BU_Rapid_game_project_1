@@ -86,6 +86,9 @@ public class Player : MonoBehaviour
     public AudioClip hitSound;
     [Range(0f, 1f)] public float hitVolume = 1.0f;
 
+    public AudioClip catchSound;
+    [Range(0f, 1f)] public float catchVolume = 1.0f;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -277,6 +280,17 @@ public class Player : MonoBehaviour
                         isHoldRock = true;
 
                         missedIconUI.SetActive(false);
+
+                        if (catchSound != null)
+                        {
+                            GameObject catchAudioObj = new GameObject("CatchAudio");
+                            AudioSource source = catchAudioObj.AddComponent<AudioSource>();
+                            source.clip = catchSound;
+                            source.volume = catchVolume;
+                            source.spatialBlend = 0f; 
+                            source.Play();
+                            Destroy(catchAudioObj, catchSound.length + 0.5f);
+                        }
                     }
 
 
