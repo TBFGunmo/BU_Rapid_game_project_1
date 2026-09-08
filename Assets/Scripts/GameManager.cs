@@ -71,10 +71,7 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        if (gameHasStarted)
-        {
-            return;
-        }
+        if (gameHasStarted) return;
 
         gameHasStarted = true;
         timeIsRun = true;
@@ -114,6 +111,8 @@ public class GameManager : MonoBehaviour
 
         rockCut.PlayWinCutscene();
 
+        if (BGMManager.Instance != null) BGMManager.Instance.FadeBGMDown();
+
         //Time.timeScale = 0f;
     }
 
@@ -132,8 +131,9 @@ public class GameManager : MonoBehaviour
         {
             timeIsRun = false;
             StopPlayer();
-
             loseCut.PlayLoseCutscene();
+
+            if (BGMManager.Instance != null) BGMManager.Instance.FadeBGMDown();
         }
     }
 
@@ -162,11 +162,13 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void StartLevel3() 
+    public void StartLevel3()
     {
         if (!isLevel3)
         {
             isLevel3 = true;
+
+            if (BGMManager.Instance != null) BGMManager.Instance.PlayPhase3BGM();
         }
     }
 
